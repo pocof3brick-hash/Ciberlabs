@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CiberLab</title>
+<style>
+:root{--bg:#f4f6f8;--panel:#fff;--text:#10181f;--muted:#566574;--line:#d3dce3;--red:#c62f2f;--blue:#1f63c4;--green:#13804f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0f14;--panel:#121923;--text:#e6edf3;--muted:#8b98a5;--line:#243040;--red:#ff6b6b;--blue:#5aa9ff;--green:#3ddc97}}
+:root[data-theme="dark"]{--bg:#0b0f14;--panel:#121923;--text:#e6edf3;--muted:#8b98a5;--line:#243040;--red:#ff6b6b;--blue:#5aa9ff;--green:#3ddc97}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.wrap{max-width:600px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.01em}
+h2{font-size:19px;margin:0}
+.sub{color:var(--muted);margin:0 0 16px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.card{display:block;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 10px}
+.card .t{font-weight:700;font-size:17px}
+.card .d{color:var(--muted);font-size:14px;margin-top:2px}
+.card[disabled]{opacity:.55;cursor:default}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;border:1px solid var(--line);color:var(--muted);margin-left:6px;vertical-align:middle}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green)}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.back{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:8px 12px}
+.tabs{display:flex;gap:8px;margin:12px 0 16px}
+.tabs button{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-weight:700}
+.tabs button[aria-selected="true"]{border-color:var(--green);color:var(--green)}
+.layer{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:0 0 8px;overflow:hidden}
+.lh{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;padding:12px 14px;text-align:left}
+.num{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-weight:700;background:var(--bg);border:1px solid var(--line)}
+.layer.seen .num{border-color:var(--green);color:var(--green)}
+.ln{font-weight:700}.lu{color:var(--muted);font-size:13px}
+.lb{padding:2px 14px 14px;border-top:1px solid var(--line)}
+.lb p{margin:10px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:13px;padding:3px 9px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}
+.sw{display:flex;gap:8px;margin-top:14px}
+.sw button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-weight:700}
+.sw .r[aria-pressed="true"]{border-color:var(--red);color:var(--red)}
+.sw .b[aria-pressed="true"]{border-color:var(--blue);color:var(--blue)}
+.pov{margin-top:10px;padding:12px;border-radius:10px;border-left:4px solid var(--line);background:var(--bg)}
+.pov.r{border-left-color:var(--red)}.pov.b{border-left-color:var(--blue)}
+.pov b{display:block;margin-bottom:2px}
+.pov.r b{color:var(--red)}.pov.b b{color:var(--blue)}
+.truco{margin:14px 0 0;padding:12px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:14px}
+.q{font-size:18px;margin:6px 0 14px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opts button{padding:12px 8px;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-weight:700;text-align:left}
+.opts button.ok{border-color:var(--green);color:var(--green)}
+.opts button.no{border-color:var(--red);color:var(--red)}
+.fb{margin-top:14px;padding:12px;border-radius:10px;background:var(--panel);border:1px solid var(--line)}
+.next{width:100%;margin-top:12px;padding:13px;border-radius:12px;border:0;background:var(--green);color:#06130c;font-weight:700;font-size:16px}
+.score{font-size:15px;color:var(--muted);margin-bottom:6px}
+.tg{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;padding:11px 14px;margin:0 0 6px;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.st{font-size:13px;font-weight:700}
+.step{padding:10px 12px;border-radius:10px;margin:0 0 6px;border-left:4px solid var(--line);background:var(--panel)}
+.step.pass{border-left-color:var(--red)}.step.stop{border-left-color:var(--green)}.step.skip{opacity:.5}
+.sw .g[aria-pressed="true"]{border-color:var(--green);color:var(--green)}
+.sw button[disabled]{opacity:.5;cursor:default}
+.ghostb{width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);font-weight:700}
+.cmdrow{margin:0 0 8px;padding:10px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
+.cmdrow .c{font-size:14px}
+.cmdrow .d2{color:var(--muted);font-size:13px;margin-top:2px}
+.sect{font-weight:700;margin:14px 0 6px;font-size:14px}
+.sect.r{color:var(--red)}.sect.b{color:var(--blue)}
+.ck{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;padding:11px 12px;margin:0 0 6px;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.ck .box{width:20px;height:20px;border-radius:5px;border:2px solid var(--muted);flex:none;margin-top:2px}
+.ck[aria-pressed="true"] .box{background:var(--green);border-color:var(--green)}
+.ck[aria-pressed="true"] .tx{opacity:.65;text-decoration:line-through}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<section id="home">
+  <h1 class="mono">CiberLab</h1>
+  <p class="sub">Aprende a pensar como atacante para defender mejor. Un módulo a la vez.</p>
+  <button class="card" id="goOsi"><span class="t">Modelo OSI</span><div class="d">Las 7 capas, cómo las ataca un red teamer y cómo las defiende el equipo azul.</div><div class="bar"><i id="hp" style="width:0"></i></div><div class="d" id="ht" style="margin-top:6px"></div></button>
+  <button class="card" id="goAtk"><span class="t">Tipos de ataques</span><div class="d">Las fases de un ataque real, de reconocimiento a impacto, y cómo frenarlo en cada una.</div><div class="bar"><i id="hp2" style="width:0"></i></div><div class="d" id="ht2" style="margin-top:6px"></div></button>
+  <button class="card" id="goDef"><span class="t">Defensa en profundidad</span><div class="d">Por qué se defiende por capas, cómo las esquiva un atacante y un simulador para probarlo.</div><div class="bar"><i id="hp3" style="width:0"></i></div><div class="d" id="ht3" style="margin-top:6px"></div></button>
+  <button class="card" id="goOs"><span class="t">Sistemas operativos</span><div class="d">Cómo se ataca y se defiende cada sistema: Windows, Linux y Android.</div><div class="bar"><i id="hp4" style="width:0"></i></div><div class="d" id="ht4" style="margin-top:6px"></div></button>
+  <button class="card" id="goAd"><span class="t">Active Directory</span><div class="d">El corazón de las redes Windows: cómo funciona, cómo se abusa y cómo se protege.</div><div class="bar"><i id="hp5" style="width:0"></i></div><div class="d" id="ht5" style="margin-top:6px"></div></button>
+  <button class="card" id="goCmd"><span class="t">Comandos de Kali</span><div class="d">Qué usa el red team y qué usa el blue team en cada fase de un ataque.</div><div class="bar"><i id="hp6" style="width:0"></i></div><div class="d" id="ht6" style="margin-top:6px"></div></button>
+  <button class="card" id="goFw"><span class="t">Firewall, IDS e IPS</span><div class="d">Cómo se configuran, qué reglas importan y cómo intenta esquivarlos un atacante.</div><div class="bar"><i id="hp7" style="width:0"></i></div><div class="d" id="ht7" style="margin-top:6px"></div></button>
+  <button class="card" id="goBp"><span class="t">Buenas prácticas</span><div class="d">Guía rápida de cierre: lo esencial de red team y blue team, en una lista para repasar.</div><div class="bar"><i id="hp8" style="width:0"></i></div><div class="d" id="ht8" style="margin-top:6px"></div></button>
+  <button class="card" id="goLog"><span class="t">Lectura de logs</span><div class="d">Ejemplos reales de registros de SSH, web y firewall: qué mira el red team y qué mira el blue team.</div><div class="bar"><i id="hp9" style="width:0"></i></div><div class="d" id="ht9" style="margin-top:6px"></div></button>
+  <button class="card" disabled><span class="t">Laboratorios<span class="tag">pronto</span></span><div class="d">Práctica guiada en entornos tuyos y autorizados.</div></button>
+</section>
+
+<section id="osi" hidden>
+  <div class="top"><button class="back" id="back">← Inicio</button><h2>Modelo OSI</h2></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tCapas" aria-selected="true">Capas</button>
+    <button role="tab" id="tPrac" aria-selected="false">Práctica</button>
+  </div>
+  <div id="vCapas">
+    <p class="sub">Toca una capa. Cambia entre la mirada del atacante y la del defensor.</p>
+    <div id="layers"></div>
+    <div class="truco">Para recordarlas de abajo hacia arriba: <b>F</b>ui <b>E</b>scuchando <b>R</b>adio <b>T</b>ras <b>S</b>entarme <b>P</b>ara <b>A</b>lmorzar.</div>
+  </div>
+  <div id="vPrac" hidden></div>
+</section>
+
+<section id="atk" hidden>
+  <div class="top"><button class="back" id="back2">← Inicio</button><h2>Tipos de ataques</h2></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tFases" aria-selected="true">Fases</button>
+    <button role="tab" id="tPrac2" aria-selected="false">Práctica</button>
+  </div>
+  <div id="vFases">
+    <p class="sub">Un ataque real es una cadena. Toca cada fase y mira qué busca el atacante y cómo se corta.</p>
+    <div id="phases"></div>
+  </div>
+  <div id="vPrac2" hidden></div>
+</section>
+
+<section id="def" hidden>
+  <div class="top"><button class="back" id="back3">← Inicio</button><h2>Defensa en profundidad</h2></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tCapasD" aria-selected="true">Capas</button>
+    <button role="tab" id="tSim" aria-selected="false">Simulador</button>
+    <button role="tab" id="tPracD" aria-selected="false">Práctica</button>
+  </div>
+  <div id="vCapasD">
+    <p class="sub">Ninguna defensa es perfecta. Por eso se apilan: si una falla, la siguiente frena al atacante.</p>
+    <div id="layersD"></div>
+  </div>
+  <div id="vSim" hidden></div>
+  <div id="vPracD" hidden></div>
+</section>
+
+<section id="os" hidden>
+  <div class="top"><button class="back" id="back4">← Inicio</button><h2>Sistemas operativos</h2></div>
+  <div class="sw" style="margin-top:4px">
+    <button class="g" id="oWin" aria-pressed="true">Windows</button>
+    <button class="g" id="oLin" aria-pressed="false">Linux</button>
+    <button class="g" id="oAnd" aria-pressed="false">Android</button>
+  </div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tAreas" aria-selected="true">Áreas</button>
+    <button role="tab" id="tPracO" aria-selected="false">Práctica</button>
+  </div>
+  <div id="vAreas">
+    <p class="sub">Un sistema operativo se ataca y se defiende por áreas. Toca una y compara las dos miradas.</p>
+    <div id="areas"></div>
+  </div>
+  <div id="vPracO" hidden></div>
+</section>
+
+<section id="ad" hidden>
+  <div class="top"><button class="back" id="back5">← Inicio</button><h2>Active Directory</h2></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tAreasA" aria-selected="true">Áreas</button>
+    <button role="tab" id="tCam" aria-selected="false">Camino</button>
+    <button role="tab" id="tPracA" aria-selected="false">Práctica</button>
+  </div>
+  <div id="vAreasA">
+    <p class="sub">AD es el directorio que dice quién es quién en una red Windows. Por eso es el gran objetivo de un atacante.</p>
+    <div id="areasA"></div>
+  </div>
+  <div id="vCam" hidden></div>
+  <div id="vPracA" hidden></div>
+</section>
+
+<section id="cmd" hidden>
+  <div class="top"><button class="back" id="back6">← Inicio</button><h2>Comandos de Kali</h2></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tFasesC" aria-selected="true">Fases</button>
+    <button role="tab" id="tPracC" aria-selected="false">Práctica</button>
+  </div>
+  <div id="vFasesC">
+    <p class="sub">Las mismas 6 fases de un ataque, ahora con los comandos típicos de cada bando. Uso solo en tu laboratorio o con autorización.</p>
+    <div id="fasesC"></div>
+  </div>
+  <div id="vPracC" hidden></div>
+</section>
+
+<section id="fw" hidden>
+  <div class="top"><button class="back" id="back7">← Inicio</button><h2>Firewall, IDS e IPS</h2></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tAreasF" aria-selected="true">Áreas</button>
+    <button role="tab" id="tReglas" aria-selected="false">Reglas</button>
+    <button role="tab" id="tPracF" aria-selected="false">Práctica</button>
+  </div>
+  <div id="vAreasF">
+    <p class="sub">Firewall, IDS e IPS cumplen roles distintos. Toca cada uno para compararlos.</p>
+    <div id="areasF"></div>
+  </div>
+  <div id="vReglas" hidden></div>
+  <div id="vPracF" hidden></div>
+</section>
+
+<section id="bp" hidden>
+  <div class="top"><button class="back" id="back8">← Inicio</button><h2>Buenas prácticas</h2></div>
+  <div class="sw" style="margin-top:4px">
+    <button class="r" id="bpR" aria-pressed="true">Red team</button>
+    <button class="b" id="bpB" aria-pressed="false">Blue team</button>
+  </div>
+  <p class="sub" style="margin-top:10px">Marca cada práctica al repasarla. Es un cierre: resume ideas de los módulos anteriores.</p>
+  <div id="bpList"></div>
+</section>
+
+<section id="log" hidden>
+  <div class="top"><button class="back" id="back9">← Inicio</button><h2>Lectura de logs</h2></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tCasos" aria-selected="true">Casos</button>
+    <button role="tab" id="tPracL" aria-selected="false">Práctica</button>
+  </div>
+  <div id="vCasos">
+    <p class="sub">Cada caso trae líneas de un registro real. Léelas antes de abrir las pistas.</p>
+    <div id="casos"></div>
+  </div>
+  <div id="vPracL" hidden></div>
+</section>
+
+</main>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+  var L=[
+   {n:7,name:'Aplicación',unit:'Datos',what:'Es lo que usa la persona: navegador, correo, apps. Aquí viven los servicios.',proto:['HTTP/HTTPS','DNS','SMTP','SSH','FTP'],atk:'Busca fallos en la lógica y en las entradas: inyección SQL, XSS, phishing, contraseñas débiles. Es la capa más expuesta.',def:'Validar entradas, WAF, parches al día, contraseñas fuertes con doble factor.'},
+   {n:6,name:'Presentación',unit:'Datos',what:'Traduce, comprime y cifra los datos para que ambos lados se entiendan.',proto:['TLS/SSL','JPEG','ASCII','Cifrado'],atk:'Intenta debilitar el cifrado: forzar versiones viejas de TLS (downgrade) o usar certificados falsos.',def:'Usar TLS 1.2 o superior, HSTS y validar certificados.'},
+   {n:5,name:'Sesión',unit:'Datos',what:'Abre, mantiene y cierra la conversación entre dos equipos.',proto:['Sesiones web','Cookies','NetBIOS','RPC'],atk:'Roba o adivina el identificador de sesión (secuestro de sesión) para hacerse pasar por la víctima sin conocer su clave.',def:'Tokens aleatorios, que expiren, regenerarlos al iniciar sesión y cerrar sesiones inactivas.'},
+   {n:4,name:'Transporte',unit:'Segmentos',what:'Decide cómo viaja el dato: TCP (confiable) o UDP (rápido). Usa puertos para distinguir servicios.',proto:['TCP','UDP','Puertos'],atk:'Escanea puertos para ver qué servicios hay abiertos y lanza inundaciones SYN para saturar al servidor.',def:'Firewall, cerrar puertos que no se usan, SYN cookies y límites de conexiones.'},
+   {n:3,name:'Red',unit:'Paquetes',what:'Direcciona y enruta: decide por qué camino llega el paquete usando direcciones IP.',proto:['IP','ICMP','Routers','IPsec'],atk:'Falsifica la IP de origen (spoofing), manipula rutas o inunda con pings para tumbar un equipo.',def:'Filtrado de IPs, listas de control de acceso, segmentar redes y usar IPsec.'},
+   {n:2,name:'Enlace de datos',unit:'Tramas',what:'Mueve datos entre equipos de la misma red local usando direcciones MAC. Aquí trabajan los switches.',proto:['Ethernet','MAC','ARP','VLAN','Wi-Fi'],atk:'Envenena ARP para ponerse en medio de la comunicación (man in the middle) o satura el switch con direcciones MAC.',def:'Port security, inspección dinámica de ARP, VLANs separadas y cifrado en Wi-Fi.'},
+   {n:1,name:'Física',unit:'Bits',what:'El medio real: cables, fibra, ondas de radio, conectores y hardware.',proto:['Cables','Fibra','Radio','Hubs'],atk:'Acceso físico: conectar un dispositivo, intervenir un cable o interferir la señal. Sin puerta cerrada, el resto de la defensa pierde valor.',def:'Control de acceso, cámaras, racks con llave y puertos sin usar deshabilitados.'}
+  ];
+  var Q=[
+   {t:'Un atacante envía miles de solicitudes SYN sin completar el saludo TCP para saturar un servidor.',a:4,w:'Es abuso del handshake de TCP, protocolo de la capa de transporte (SYN flood).'},
+   {t:'Alguien responde en la red local diciendo “esa IP soy yo” con su propia dirección MAC.',a:2,w:'ARP une IP con MAC dentro de la red local. Es ARP spoofing, capa de enlace.'},
+   {t:'Un atacante escribe código SQL en un campo de login para saltarse la contraseña.',a:7,w:'La inyección SQL ataca la lógica de la aplicación web: capa de aplicación.'},
+   {t:'Alguien intervino un cable de red en una sala sin llave para capturar el tráfico.',a:1,w:'Es acceso al medio físico: capa física.'},
+   {t:'Se falsifica la IP de origen de los paquetes para ocultar quién ataca.',a:3,w:'Las direcciones IP pertenecen a la capa de red (IP spoofing).'},
+   {t:'Se roba la cookie de sesión de una persona para entrar a su cuenta sin saber la clave.',a:5,w:'Es secuestro de sesión: la capa de sesión mantiene la conversación activa.'},
+   {t:'Se fuerza a dos equipos a usar una versión vieja y débil de TLS para poder descifrar.',a:6,w:'Es un ataque downgrade al cifrado, que se asocia a la capa de presentación.'},
+   {t:'Con nmap se revisa qué puertos tiene abiertos un servidor.',a:4,w:'Los puertos pertenecen a la capa de transporte (TCP y UDP).'}
+  ];
+  var P={seen:{},best:0};
+  try{ var sv=JSON.parse(store.get('cl-osi')||'null'); if(sv) P=sv; }catch(e){}
+  function save(){ store.set('cl-osi',JSON.stringify(P)); }
+  function seenCount(){ return Object.keys(P.seen).length; }
+  function home(){ var c=seenCount(); $('hp').style.width=(c/7*100)+'%'; $('ht').textContent=c+' de 7 capas exploradas'+(P.best?' · mejor práctica '+P.best+'/'+Q.length:'');
+    var ca=Object.keys(A.seen).length; $('hp2').style.width=(ca/6*100)+'%'; $('ht2').textContent=ca+' de 6 fases exploradas'+(A.best?' · mejor práctica '+A.best+'/'+QA.length:'');
+    var cd=Object.keys(D.seen).length; $('hp3').style.width=(cd/6*100)+'%'; $('ht3').textContent=cd+' de 6 capas exploradas'+(D.best?' · mejor práctica '+D.best+'/'+QD.length:'');
+    osHome(); adHome(); cmdHome(); fwHome(); bpHome(); logHome(); }
+  function go(v){ $('home').hidden=v!=='home'; $('osi').hidden=v!=='osi'; $('atk').hidden=v!=='atk'; $('def').hidden=v!=='def'; $('os').hidden=v!=='os'; $('ad').hidden=v!=='ad'; $('cmd').hidden=v!=='cmd'; $('fw').hidden=v!=='fw'; $('bp').hidden=v!=='bp'; $('log').hidden=v!=='log'; if(v==='home') home(); window.scrollTo(0,0); }
+  $('goOsi').addEventListener('click',function(){ go('osi'); });
+  $('back').addEventListener('click',function(){ go('home'); });
+
+  /* Capas */
+  var open=null, pov={};
+  function renderLayers(){
+    var h='';
+    L.forEach(function(l){
+      var o=open===l.n, p=pov[l.n]||'r';
+      h+='<div class="layer'+(P.seen[l.n]?' seen':'')+'"><button class="lh" data-n="'+l.n+'" aria-expanded="'+o+'"><span class="num mono">'+l.n+'</span><span><div class="ln">'+l.name+'</div><div class="lu">Unidad: '+l.unit+'</div></span></button>';
+      if(o){
+        h+='<div class="lb"><p>'+l.what+'</p><div class="chips">'+l.proto.map(function(x){return '<span class="chip mono">'+x+'</span>'}).join('')+'</div>'
+          +'<div class="sw"><button class="r" data-p="r" data-n="'+l.n+'" aria-pressed="'+(p==='r')+'">Atacante</button><button class="b" data-p="b" data-n="'+l.n+'" aria-pressed="'+(p==='b')+'">Defensor</button></div>'
+          +(p==='r'?'<div class="pov r"><b>Si fueras el atacante</b>'+l.atk+'</div>':'<div class="pov b"><b>Si fueras el defensor</b>'+l.def+'</div>')+'</div>';
+      }
+      h+='</div>';
+    });
+    $('layers').innerHTML=h;
+  }
+  $('layers').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var n=+b.getAttribute('data-n');
+    if(b.classList.contains('lh')){ open=(open===n)?null:n; if(open){ P.seen[n]=1; save(); } }
+    else { pov[n]=b.getAttribute('data-p'); }
+    renderLayers();
+  });
+  renderLayers();
+
+  /* Pestañas */
+  function tab(t){
+    $('tCapas').setAttribute('aria-selected',t==='c'); $('tPrac').setAttribute('aria-selected',t==='p');
+    $('vCapas').hidden=t!=='c'; $('vPrac').hidden=t!=='p';
+    if(t==='p') startQuiz();
+  }
+  $('tCapas').addEventListener('click',function(){ tab('c'); });
+  $('tPrac').addEventListener('click',function(){ tab('p'); });
+
+  /* Práctica */
+  var qs=[], qi=0, score=0, answered=false;
+  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function startQuiz(){ qs=shuffle(Q); qi=0; score=0; renderQ(); }
+  function renderQ(){
+    var v=$('vPrac'); answered=false;
+    if(qi>=qs.length){
+      if(score>P.best){ P.best=score; save(); }
+      v.innerHTML='<p class="score">Resultado</p><div class="q">Acertaste '+score+' de '+qs.length+'.</div><div class="fb">'+(score===qs.length?'Pensaste como atacante en todas.':'Repasa las capas donde fallaste y vuelve a intentar: cada ronda mezcla el orden.')+'</div><button class="next" id="again">Repetir práctica</button>';
+      $('again').addEventListener('click',startQuiz); return;
+    }
+    var q=qs[qi];
+    v.innerHTML='<p class="score">Pregunta '+(qi+1)+' de '+qs.length+' · aciertos '+score+'</p><div class="q">'+q.t+'</div><p class="sub">¿En qué capa ocurre?</p><div class="opts">'+L.map(function(l){return '<button data-n="'+l.n+'"><span class="mono">'+l.n+'</span> '+l.name+'</button>'}).join('')+'</div><div id="fbk"></div>';
+  }
+  $('vPrac').addEventListener('click',function(e){
+    var b=e.target.closest('.opts button'); if(!b||answered) return;
+    answered=true; var q=qs[qi], n=+b.getAttribute('data-n'), ok=n===q.a;
+    if(ok) score++;
+    var all=$('vPrac').querySelectorAll('.opts button');
+    all.forEach(function(x){ var xn=+x.getAttribute('data-n'); if(xn===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+    $('fbk').innerHTML='<div class="fb"><b>'+(ok?'Correcto.':'No es esa.')+'</b> '+q.w+'</div><button class="next" id="nx">'+(qi+1<qs.length?'Siguiente':'Ver resultado')+'</button>';
+    $('nx').addEventListener('click',function(){ qi++; renderQ(); });
+  });
+
+  /* Módulo: Tipos de ataques (fases) */
+  var PH=[
+   {n:1,name:'Reconocimiento',goal:'Reunir información del objetivo antes de tocarlo.',ex:'Revisar redes sociales y el sitio web de la empresa para saber quién trabaja en TI y qué tecnologías usa.',atk:'Busca información pública (OSINT): dominios, correos, empleados, tecnologías. También puede revisar qué servicios están expuestos a internet. Mientras más sabe, mejor elige por dónde entrar.',def:'Publicar menos de lo necesario, capacitar al personal sobre qué comparte, y vigilar escaneos y consultas extrañas contra tus servicios.',layers:[7,4]},
+   {n:2,name:'Acceso inicial',goal:'Conseguir el primer pie dentro.',ex:'Un correo falso de “soporte” convence a un empleado de entregar su contraseña.',atk:'Phishing, contraseñas débiles o filtradas, o un servicio expuesto sin parchear. Casi siempre entra por la persona o por un descuido, no por algo sofisticado.',def:'Doble factor, parches al día, filtrado de correo y contraseñas únicas por servicio.',layers:[7,4]},
+   {n:3,name:'Ejecución y persistencia',goal:'Ejecutar su código y asegurarse de poder volver.',ex:'Crea una tarea programada que reabre su acceso cada vez que se reinicia el equipo.',atk:'Una vez dentro, no quiere perder el acceso: crea cuentas, tareas o inicios automáticos para regresar aunque lo echen una vez.',def:'Antivirus o EDR, vigilar cuentas y tareas nuevas, y revisar qué se ejecuta al iniciar.',layers:[7]},
+   {n:4,name:'Escalada de privilegios',goal:'Pasar de usuario común a administrador.',ex:'Con una cuenta normal consigue permisos de administrador por una configuración mal hecha.',atk:'Busca permisos de más, configuraciones débiles y contraseñas reutilizadas para ganar control total del equipo.',def:'Mínimo privilegio, cuentas de administrador separadas y revisar permisos con regularidad.',layers:[7]},
+   {n:5,name:'Movimiento lateral',goal:'Saltar de equipo en equipo hasta el objetivo.',ex:'Desde el equipo comprometido se conecta a otros equipos internos con las mismas credenciales.',atk:'Usa credenciales y confianza entre equipos para recorrer la red buscando el servidor o los datos que le interesan.',def:'Segmentar la red, no reutilizar contraseñas y detectar conexiones internas que no son normales.',layers:[3,2]},
+   {n:6,name:'Exfiltración e impacto',goal:'Cumplir el objetivo: robar, cifrar o interrumpir.',ex:'Los archivos de la empresa aparecen cifrados y piden un rescate.',atk:'Saca datos hacia afuera, los cifra para pedir rescate (ransomware) o tumba un servicio. Es la fase que sí se nota.',def:'Respaldos fuera de línea y probados, monitorear datos que salen de la red y un plan de respuesta ensayado.',layers:[7,4,3]}
+  ];
+  var QA=[
+   {t:'Alguien revisa LinkedIn y el sitio web de una empresa para saber quiénes trabajan en TI y qué tecnologías usan.',a:1,w:'Es recopilar información antes de atacar: reconocimiento.'},
+   {t:'Un empleado recibe un correo falso de soporte y entrega su contraseña.',a:2,w:'Es la primera entrada al sistema por una persona: acceso inicial.'},
+   {t:'El atacante crea una tarea programada para que su acceso vuelva a abrirse tras cada reinicio.',a:3,w:'Busca quedarse y poder volver: persistencia.'},
+   {t:'Con una cuenta de usuario normal consigue permisos de administrador por una configuración mal hecha.',a:4,w:'Pasa de pocos permisos a muchos: escalada de privilegios.'},
+   {t:'Desde el equipo comprometido empieza a conectarse a otros equipos internos con las mismas credenciales.',a:5,w:'Se mueve de equipo en equipo dentro de la red: movimiento lateral.'},
+   {t:'Los archivos de la empresa aparecen cifrados y aparece una nota pidiendo rescate.',a:6,w:'Es el golpe final del ataque: impacto (ransomware).'},
+   {t:'Se hace un escaneo para ver qué servicios tiene expuestos una empresa en internet.',a:1,w:'Todavía no entra: está mirando y juntando datos. Reconocimiento.'},
+   {t:'Alguien entra con una contraseña filtrada en otro sitio que el empleado reutilizaba.',a:2,w:'Es el primer acceso al sistema aprovechando un descuido: acceso inicial.'}
+  ];
+  var A={seen:{},best:0};
+  try{ var sa=JSON.parse(store.get('cl-atk')||'null'); if(sa) A=sa; }catch(e){}
+  function saveA(){ store.set('cl-atk',JSON.stringify(A)); }
+  var aOpen=null, aPov={};
+  function lname(n){ for(var i=0;i<L.length;i++) if(L[i].n===n) return 'Capa '+n+' · '+L[i].name; return 'Capa '+n; }
+  function renderPh(){
+    var h='';
+    PH.forEach(function(f){
+      var o=aOpen===f.n, p=aPov[f.n]||'r';
+      h+='<div class="layer'+(A.seen[f.n]?' seen':'')+'"><button class="lh" data-n="'+f.n+'" aria-expanded="'+o+'"><span class="num mono">'+f.n+'</span><span><div class="ln">'+f.name+'</div><div class="lu">'+f.goal+'</div></span></button>';
+      if(o){
+        h+='<div class="lb"><p><b>Ejemplo:</b> '+f.ex+'</p><div class="chips">'+f.layers.map(function(x){return '<span class="chip mono">'+lname(x)+'</span>'}).join('')+'</div>'
+          +'<div class="sw"><button class="r" data-p="r" data-n="'+f.n+'" aria-pressed="'+(p==='r')+'">Atacante</button><button class="b" data-p="b" data-n="'+f.n+'" aria-pressed="'+(p==='b')+'">Defensor</button></div>'
+          +(p==='r'?'<div class="pov r"><b>Qué hace el atacante</b>'+f.atk+'</div>':'<div class="pov b"><b>Cómo se corta aquí</b>'+f.def+'</div>')+'</div>';
+      }
+      h+='</div>';
+    });
+    $('phases').innerHTML=h;
+  }
+  $('phases').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var n=+b.getAttribute('data-n');
+    if(b.classList.contains('lh')){ aOpen=(aOpen===n)?null:n; if(aOpen){ A.seen[n]=1; saveA(); } }
+    else { aPov[n]=b.getAttribute('data-p'); }
+    renderPh();
+  });
+  renderPh();
+  $('goAtk').addEventListener('click',function(){ go('atk'); });
+  $('back2').addEventListener('click',function(){ go('home'); });
+  function tabA(t){
+    $('tFases').setAttribute('aria-selected',t==='f'); $('tPrac2').setAttribute('aria-selected',t==='p');
+    $('vFases').hidden=t!=='f'; $('vPrac2').hidden=t!=='p';
+    if(t==='p') startA();
+  }
+  $('tFases').addEventListener('click',function(){ tabA('f'); });
+  $('tPrac2').addEventListener('click',function(){ tabA('p'); });
+  var as=[], ai=0, ascore=0, aans=false;
+  function startA(){ as=shuffle(QA); ai=0; ascore=0; renderA(); }
+  function renderA(){
+    var v=$('vPrac2'); aans=false;
+    if(ai>=as.length){
+      if(ascore>A.best){ A.best=ascore; saveA(); }
+      v.innerHTML='<p class="score">Resultado</p><div class="q">Acertaste '+ascore+' de '+as.length+'.</div><div class="fb">'+(ascore===as.length?'Ves el ataque como una cadena, no como piezas sueltas.':'Repasa las fases donde fallaste y repite: cada ronda cambia el orden.')+'</div><button class="next" id="again2">Repetir práctica</button>';
+      $('again2').addEventListener('click',startA); return;
+    }
+    var q=as[ai];
+    v.innerHTML='<p class="score">Pregunta '+(ai+1)+' de '+as.length+' · aciertos '+ascore+'</p><div class="q">'+q.t+'</div><p class="sub">¿En qué fase del ataque estamos?</p><div class="opts">'+PH.map(function(f){return '<button data-n="'+f.n+'"><span class="mono">'+f.n+'</span> '+f.name+'</button>'}).join('')+'</div><div id="fbk2"></div>';
+  }
+  $('vPrac2').addEventListener('click',function(e){
+    var b=e.target.closest('.opts button'); if(!b||aans) return;
+    aans=true; var q=as[ai], n=+b.getAttribute('data-n'), ok=n===q.a;
+    if(ok) ascore++;
+    $('vPrac2').querySelectorAll('.opts button').forEach(function(x){ var xn=+x.getAttribute('data-n'); if(xn===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+    $('fbk2').innerHTML='<div class="fb"><b>'+(ok?'Correcto.':'No es esa.')+'</b> '+q.w+'</div><button class="next" id="nx2">'+(ai+1<as.length?'Siguiente':'Ver resultado')+'</button>';
+    $('nx2').addEventListener('click',function(){ ai++; renderA(); });
+  });
+
+  /* Módulo: Defensa en profundidad */
+  var DL=[
+   {n:1,name:'Personas y procesos',prot:'El factor humano: quién hace clic, quién reporta, quién responde.',def:'Capacitación, políticas claras, doble factor y un plan de respuesta a incidentes que todos conozcan.',atk:'Apunta primero a las personas porque es lo más fácil: phishing, ingeniería social y mensajes con urgencia falsa. Si nadie sabe qué reportar, nadie lo frena.',ph:[1,2]},
+   {n:2,name:'Perímetro',prot:'La frontera entre internet y la red de la empresa.',def:'Firewall, IDS/IPS, filtrado de correo y web, VPN y reglas que solo dejan pasar lo necesario.',atk:'Busca reglas demasiado abiertas, puertos olvidados o servicios expuestos. También oculta su actividad dentro de tráfico cifrado que parece normal.',ph:[1,2]},
+   {n:3,name:'Red interna',prot:'El tránsito entre equipos dentro de la organización.',def:'Segmentar en VLANs, controlar quién se conecta a qué y monitorear conexiones internas raras.',atk:'En una red plana, una vez dentro se mueve libremente hacia cualquier equipo. La segmentación le quita ese recorrido fácil.',ph:[5]},
+   {n:4,name:'Equipos',prot:'Computadores, servidores y celulares (endpoints).',def:'Parches al día, antivirus o EDR, configuración segura y mínimo privilegio.',atk:'Busca equipos sin parchear o con permisos de sobra, e intenta apagar o evadir el antivirus antes de actuar.',ph:[3,4]},
+   {n:5,name:'Aplicaciones',prot:'El software que atiende a usuarios y a otros sistemas.',def:'Validar entradas, desarrollo seguro, WAF y revisiones de código.',atk:'Prueba entradas inesperadas para encontrar fallas de lógica: es una puerta que no pasa por el firewall como tal, porque el tráfico parece legítimo.',ph:[2]},
+   {n:6,name:'Datos',prot:'Lo que de verdad importa: la información.',def:'Cifrado, respaldos fuera de línea y probados, permisos mínimos y control de salida de datos.',atk:'Los datos son el objetivo final. Si no hay respaldos buenos, el rescate parece la única salida.',ph:[6]}
+  ];
+  function dname(n){ for(var i=0;i<DL.length;i++) if(DL[i].n===n) return DL[i].name; return ''; }
+  function pname(n){ for(var i=0;i<PH.length;i++) if(PH[i].n===n) return 'Fase '+n+' · '+PH[i].name; return 'Fase '+n; }
+  var D={seen:{},best:0};
+  try{ var sd=JSON.parse(store.get('cl-def')||'null'); if(sd) D=sd; }catch(e){}
+  function saveD(){ store.set('cl-def',JSON.stringify(D)); }
+  var dOpen=null, dPov={};
+  function renderD(){
+    var h='';
+    DL.forEach(function(f){
+      var o=dOpen===f.n, p=dPov[f.n]||'b';
+      h+='<div class="layer'+(D.seen[f.n]?' seen':'')+'"><button class="lh" data-n="'+f.n+'" aria-expanded="'+o+'"><span class="num mono">'+f.n+'</span><span><div class="ln">'+f.name+'</div><div class="lu">'+f.prot+'</div></span></button>';
+      if(o){
+        h+='<div class="lb"><div class="chips">'+f.ph.map(function(x){return '<span class="chip mono">'+pname(x)+'</span>'}).join('')+'</div>'
+          +'<div class="sw"><button class="b" data-p="b" data-n="'+f.n+'" aria-pressed="'+(p==='b')+'">Defensor</button><button class="r" data-p="r" data-n="'+f.n+'" aria-pressed="'+(p==='r')+'">Atacante</button></div>'
+          +(p==='b'?'<div class="pov b"><b>Cómo se defiende</b>'+f.def+'</div>':'<div class="pov r"><b>Cómo intenta esquivarla</b>'+f.atk+'</div>')+'</div>';
+      }
+      h+='</div>';
+    });
+    $('layersD').innerHTML=h;
+  }
+  $('layersD').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var n=+b.getAttribute('data-n');
+    if(b.classList.contains('lh')){ dOpen=(dOpen===n)?null:n; if(dOpen){ D.seen[n]=1; saveD(); } }
+    else { dPov[n]=b.getAttribute('data-p'); }
+    renderD();
+  });
+  renderD();
+  $('goDef').addEventListener('click',function(){ go('def'); });
+  $('back3').addEventListener('click',function(){ go('home'); });
+
+  /* Simulador */
+  var ATT=[
+   {name:'Ransomware por phishing',steps:[
+     {l:1,pass:'Alguien abre el correo y entrega sus credenciales.',stop:'La persona reconoce el correo y lo reporta.'},
+     {l:2,pass:'El correo y la conexión del atacante pasan sin filtro.',stop:'El filtro bloquea el correo o la conexión.'},
+     {l:4,pass:'El malware se ejecuta y gana permisos.',stop:'El EDR detiene el programa antes de que actúe.'},
+     {l:3,pass:'Se mueve a otros equipos y servidores.',stop:'La segmentación lo deja atrapado en un solo equipo.'},
+     {l:6,pass:'Cifra los archivos y pide rescate.',stop:'Los respaldos permiten restaurar sin pagar.'}]},
+   {name:'Ataque a una web',steps:[
+     {l:2,pass:'La petición maliciosa llega sin filtrar.',stop:'El firewall o el WAF corta el intento.'},
+     {l:5,pass:'La entrada se procesa y se explota una falla.',stop:'La validación rechaza la entrada.'},
+     {l:6,pass:'Extrae la base de datos completa.',stop:'Los datos están cifrados y con acceso mínimo: no obtiene nada útil.'}]}
+  ];
+  var on={1:true,2:true,3:true,4:true,5:true,6:true}, atkSel=0, simInit=false;
+  function renderSim(){
+    var at=ATT[atkSel], used={}; at.steps.forEach(function(s){ used[s.l]=1; });
+    var h='<div class="sw">'+ATT.map(function(a,i){return '<button class="g" data-a="'+i+'" aria-pressed="'+(i===atkSel)+'">'+a.name+'</button>'}).join('')+'</div>';
+    h+='<p class="sub" style="margin-top:14px">Enciende o apaga capas y mira dónde se frena el ataque.</p>';
+    DL.forEach(function(d){ h+='<button class="tg" data-l="'+d.n+'"><span>'+d.name+(used[d.n]?'':' <span style="color:var(--muted);font-size:13px">(no participa)</span>')+'</span><span class="st" style="color:'+(on[d.n]?'var(--green)':'var(--red)')+'">'+(on[d.n]?'Activa':'Apagada')+'</span></button>'; });
+    h+='<button class="ghostb" data-f="1">Simular falla en una capa al azar</button><div style="margin-top:14px">';
+    var stopped=false;
+    at.steps.forEach(function(s,i){
+      if(stopped){ h+='<div class="step skip">'+(i+1)+'. '+dname(s.l)+': el ataque ya no llega hasta aquí.</div>'; return; }
+      if(on[s.l]){ stopped=true; h+='<div class="step stop"><b>'+(i+1)+'. '+dname(s.l)+' frena el ataque.</b> '+s.stop+'</div>'; }
+      else h+='<div class="step pass"><b>'+(i+1)+'. '+dname(s.l)+' no está.</b> '+s.pass+'</div>';
+    });
+    h+=stopped?'<div class="fb">Prueba apagar justo la capa que frenó el ataque: si hay otra más adelante, igual se detiene. Eso es defensa en profundidad.</div>':'<div class="fb"><b>El ataque llegó a su objetivo.</b> Ninguna capa del recorrido lo detuvo.</div>';
+    $('vSim').innerHTML=h+'</div>';
+  }
+  $('vSim').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    if(b.getAttribute('data-a')!==null){ atkSel=+b.getAttribute('data-a'); }
+    else if(b.getAttribute('data-l')!==null){ var l=+b.getAttribute('data-l'); on[l]=!on[l]; }
+    else if(b.getAttribute('data-f')!==null){
+      var c=ATT[atkSel].steps.filter(function(s){return on[s.l]}).map(function(s){return s.l});
+      if(c.length) on[c[Math.floor(Math.random()*c.length)]]=false;
+    }
+    renderSim();
+  });
+
+  /* Práctica */
+  var QD=[
+   {t:'Un empleado reconoce un correo sospechoso y lo reporta antes de hacer clic.',a:1,w:'Es el factor humano bien entrenado: personas y procesos.'},
+   {t:'El firewall bloquea un intento de conexión desde una IP maliciosa.',a:2,w:'Filtrar lo que entra desde internet es trabajo del perímetro.'},
+   {t:'Un equipo infectado no puede llegar a los servidores porque está en otra VLAN.',a:3,w:'Separar zonas dentro de la organización es segmentación de la red interna.'},
+   {t:'Un antivirus con EDR detiene un programa que intenta ejecutarse y escalar permisos.',a:4,w:'Proteger cada computador o servidor es defensa a nivel de equipos.'},
+   {t:'Un formulario web rechaza una entrada con código SQL.',a:5,w:'Validar lo que recibe el software es defensa de la aplicación.'},
+   {t:'Tras un ransomware, la empresa restaura todo desde un respaldo fuera de línea.',a:6,w:'Los respaldos y el cifrado protegen el activo final: los datos.'},
+   {t:'Un parche cerró una falla en los equipos antes de que alguien la usara.',a:4,w:'Mantener sistemas actualizados es parte de la defensa de equipos.'},
+   {t:'Un plan de respuesta a incidentes define quién llama a quién cuando hay un ataque.',a:1,w:'Procesos y preparación del equipo humano: personas y procesos.'}
+  ];
+  var ds=[], di=0, dscore=0, dans=false;
+  function startD(){ ds=shuffle(QD); di=0; dscore=0; renderQD(); }
+  function renderQD(){
+    var v=$('vPracD'); dans=false;
+    if(di>=ds.length){
+      if(dscore>D.best){ D.best=dscore; saveD(); }
+      v.innerHTML='<p class="score">Resultado</p><div class="q">Acertaste '+dscore+' de '+ds.length+'.</div><div class="fb">'+(dscore===ds.length?'Ya identificas qué capa frena cada cosa.':'Repasa las capas que confundiste y repite: cada ronda cambia el orden.')+'</div><button class="next" id="again3">Repetir práctica</button>';
+      $('again3').addEventListener('click',startD); return;
+    }
+    var q=ds[di];
+    v.innerHTML='<p class="score">Pregunta '+(di+1)+' de '+ds.length+' · aciertos '+dscore+'</p><div class="q">'+q.t+'</div><p class="sub">¿Qué capa de defensa actúa?</p><div class="opts">'+DL.map(function(f){return '<button data-n="'+f.n+'"><span class="mono">'+f.n+'</span> '+f.name+'</button>'}).join('')+'</div><div id="fbk3"></div>';
+  }
+  $('vPracD').addEventListener('click',function(e){
+    var b=e.target.closest('.opts button'); if(!b||dans) return;
+    dans=true; var q=ds[di], n=+b.getAttribute('data-n'), ok=n===q.a;
+    if(ok) dscore++;
+    $('vPracD').querySelectorAll('.opts button').forEach(function(x){ var xn=+x.getAttribute('data-n'); if(xn===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+    $('fbk3').innerHTML='<div class="fb"><b>'+(ok?'Correcto.':'No es esa.')+'</b> '+q.w+'</div><button class="next" id="nx3">'+(di+1<ds.length?'Siguiente':'Ver resultado')+'</button>';
+    $('nx3').addEventListener('click',function(){ di++; renderQD(); });
+  });
+
+  /* Pestañas de defensa */
+  function tabD(t){
+    $('tCapasD').setAttribute('aria-selected',t==='c'); $('tSim').setAttribute('aria-selected',t==='s'); $('tPracD').setAttribute('aria-selected',t==='p');
+    $('vCapasD').hidden=t!=='c'; $('vSim').hidden=t!=='s'; $('vPracD').hidden=t!=='p';
+    if(t==='s') renderSim(); if(t==='p') startD();
+  }
+  $('tCapasD').addEventListener('click',function(){ tabD('c'); });
+  $('tSim').addEventListener('click',function(){ tabD('s'); });
+  $('tPracD').addEventListener('click',function(){ tabD('p'); });
+
+  /* Módulo: Sistemas operativos (Windows) */
+  var OA=[
+   {n:1,name:'Cuentas y permisos',what:'Quién puede hacer qué: usuarios, grupos, administrador y el control UAC que pide confirmación.',atk:'Busca cuentas con permisos de sobra, como usuarios comunes dentro del grupo de administradores. Con más permisos, cada paso posterior es más fácil.',def:'Mínimo privilegio: usar cuenta normal para el día a día, cuentas de administrador separadas y UAC activo.',lab:'Administración de equipos > Usuarios y grupos locales > Grupos > Administradores. ¿Quién aparece ahí y por qué?'},
+   {n:2,name:'Credenciales y autenticación',what:'Cómo el sistema verifica quién eres y cómo se guardan y usan las contraseñas, también en un dominio.',atk:'Apunta a credenciales reutilizadas: si una contraseña de administrador es igual en muchos equipos, una sola caída abre todos (movimiento lateral).',def:'Contraseñas únicas por equipo, doble factor, no iniciar sesión de administrador en equipos comunes y vigilar inicios de sesión fallidos.',lab:'Visor de eventos > Registros de Windows > Seguridad. Busca el evento 4625, que registra inicios de sesión fallidos.'},
+   {n:3,name:'Servicios y procesos',what:'Programas que corren en segundo plano, muchos con privilegios altos y que arrancan solos.',atk:'Busca servicios que no se usan, mal configurados o con permisos débiles, y tareas programadas para volver a entrar cuando quiera.',def:'Desactivar lo innecesario, correr servicios con cuentas limitadas y revisar tareas programadas con regularidad.',lab:'Ejecuta services.msc y revisa qué servicios están en automático y con qué cuenta se ejecutan.'},
+   {n:4,name:'Registro, políticas y arranque',what:'La configuración del sistema: el Registro de Windows, las políticas de grupo y lo que se ejecuta al iniciar.',atk:'Agrega programas al inicio automático o cambia configuraciones para persistir, y espera que nadie revise qué arranca con el equipo.',def:'Políticas de grupo que imponen configuración segura y revisar los programas de inicio y sus cambios.',lab:'Administrador de tareas > pestaña Inicio. ¿Reconoces todo lo que arranca con el equipo?'},
+   {n:5,name:'Actualizaciones',what:'Los parches de seguridad que cierran fallas conocidas del sistema y de las aplicaciones.',atk:'Busca equipos sin parchear porque las fallas conocidas ya están documentadas y son más fáciles de aprovechar que las desconocidas.',def:'Actualizaciones automáticas, inventario de equipos y retirar sistemas que ya no tienen soporte.',lab:'Configuración > Windows Update > Historial de actualizaciones. ¿Cuándo fue la última de seguridad?'},
+   {n:6,name:'Defensas integradas y registros',what:'Seguridad de Windows (antivirus), firewall, cifrado de disco con BitLocker y el registro de eventos.',atk:'Intenta apagar o evadir el antivirus y el firewall, y borrar registros para no dejar huellas de lo que hizo.',def:'Mantener antivirus y firewall activos, proteger contra manipulación, cifrar discos y enviar los registros a un lugar central.',lab:'Abre Seguridad de Windows y confirma que la protección en tiempo real y el firewall estén activos.'}
+  ];
+  var QO=[
+   {t:'Un usuario común es miembro del grupo de administradores sin necesitarlo.',a:1,w:'Son permisos de sobra: se corrige con mínimo privilegio en cuentas y permisos.'},
+   {t:'Todos los equipos de la oficina comparten la misma contraseña de administrador local.',a:2,w:'Reutilizar credenciales permite que un solo equipo caído abra los demás.'},
+   {t:'Un servicio que nadie usa corre con permisos altos y arranca solo.',a:3,w:'Es superficie innecesaria en servicios y procesos.'},
+   {t:'Aparece un programa desconocido en el inicio automático del equipo.',a:4,w:'Lo que arranca con el sistema se controla en la configuración de arranque y políticas.'},
+   {t:'Un equipo lleva meses sin instalar actualizaciones de seguridad.',a:5,w:'Los parches pendientes dejan abiertas fallas ya conocidas.'},
+   {t:'Alguien desactivó el antivirus y el firewall antes de ejecutar un programa.',a:6,w:'Apagar las defensas integradas es típico de quien quiere evitar ser detectado.'},
+   {t:'En el Visor de eventos aparecen decenas de inicios de sesión fallidos seguidos.',a:2,w:'Es un patrón de intento de adivinar contraseñas: credenciales y autenticación.'},
+   {t:'Las políticas de grupo fuerzan la misma configuración segura en todos los equipos.',a:4,w:'Las políticas de grupo son parte de la configuración centralizada del sistema.'}
+  ];
+  var LA=[
+   {n:1,name:'Usuarios, permisos y sudo',what:'Quién puede leer, escribir o ejecutar cada archivo, y quién puede actuar como root mediante sudo.',atk:'Busca archivos con permisos demasiado abiertos y cuentas con sudo de más. Su meta es llegar a root, que lo controla todo.',def:'Mínimo privilegio, sudo solo para lo necesario, permisos de archivos restrictivos y no trabajar directamente como root.',lab:'Ejecuta id para ver tu usuario y grupos, ls -l en una carpeta para ver permisos, y sudo -l para ver qué puedes hacer con sudo.'},
+   {n:2,name:'Autenticación y SSH',what:'Cómo se verifica quién entra: contraseñas guardadas como hashes y, sobre todo, el acceso remoto por SSH.',atk:'Intenta adivinar contraseñas de un SSH expuesto a internet o usar claves robadas. Los intentos masivos desde una misma IP son comunes.',def:'Claves SSH en lugar de contraseñas, no permitir login de root, limitar intentos (por ejemplo con fail2ban) y doble factor.',lab:'Ejecuta last para ver los inicios de sesión recientes de tu máquina virtual.'},
+   {n:3,name:'Servicios y puertos',what:'Programas que escuchan conexiones: cada puerto abierto es una puerta posible.',atk:'Busca puertos y servicios expuestos que no hacen falta, o versiones con fallas ya conocidas.',def:'Desactivar lo que no se usa, escuchar solo donde hace falta (por ejemplo solo en localhost) y filtrar con un firewall.',lab:'Ejecuta ss -tulpn para ver qué puertos escuchan y qué programa los abrió.'},
+   {n:4,name:'Configuración, cron y arranque',what:'Los archivos de /etc, las tareas programadas (cron) y los servicios que arrancan con el sistema.',atk:'Agrega o modifica tareas de cron, servicios o archivos de inicio para volver a entrar aunque lo detecten una vez.',def:'Revisar cambios en /etc y en las tareas programadas, permisos de escritura mínimos y control de integridad de archivos.',lab:'Ejecuta crontab -l y ls -l /etc/cron* para ver qué tareas se ejecutan solas.'},
+   {n:5,name:'Paquetes y actualizaciones',what:'El gestor de paquetes instala y actualiza el software del sistema (apt, dnf y similares).',atk:'Aprovecha software sin parchear y paquetes de fuentes no confiables, porque las fallas conocidas están documentadas.',def:'Actualizar con regularidad, usar repositorios oficiales, verificar firmas y activar parches de seguridad automáticos.',lab:'En Debian o Ubuntu, ejecuta apt list --upgradable para ver qué actualizaciones están pendientes.'},
+   {n:6,name:'Defensas y registros',what:'Firewall, controles como SELinux o AppArmor, auditoría y los registros en /var/log.',atk:'Intenta desactivar SELinux o AppArmor, apagar el firewall y borrar registros para no dejar huellas.',def:'Dejar esos controles activos, usar auditd y enviar los registros a un servidor central que el atacante no pueda alterar.',lab:'Ejecuta sudo ufw status para ver el firewall y revisa /var/log/auth.log para ver autenticaciones.'}
+  ];
+  var LQ=[
+   {t:'Un archivo con una clave privada es legible por todos los usuarios del sistema.',a:1,w:'Son permisos de archivo demasiado abiertos: usuarios, permisos y sudo.'},
+   {t:'Un usuario común puede ejecutar cualquier comando como root con sudo sin necesitarlo.',a:1,w:'Es exceso de privilegios: se corrige con mínimo privilegio y sudo acotado.'},
+   {t:'El SSH de un servidor está expuesto a internet, acepta contraseña y permite entrar como root.',a:2,w:'Es una autenticación débil en el acceso remoto: autenticación y SSH.'},
+   {t:'Aparecen cientos de intentos fallidos de SSH desde la misma IP.',a:2,w:'Es un intento de adivinar contraseñas: autenticación y SSH.'},
+   {t:'Una base de datos escucha en todas las interfaces aunque solo la usa la propia máquina.',a:3,w:'Es un puerto expuesto sin necesidad: servicios y puertos.'},
+   {t:'Aparece una tarea de cron desconocida que se ejecuta cada minuto.',a:4,w:'Las tareas programadas y el arranque son parte de la configuración que se vigila.'},
+   {t:'El servidor lleva un año sin aplicar actualizaciones de seguridad.',a:5,w:'Los parches pendientes dejan fallas conocidas abiertas: paquetes y actualizaciones.'},
+   {t:'Alguien desactivó AppArmor y borró registros de /var/log.',a:6,w:'Apagar controles y limpiar registros es evasión de defensas: defensas y registros.'}
+  ];
+  var AA=[
+   {n:1,name:'Permisos y sandbox',what:'Cada app corre aislada en su propio espacio (sandbox) y debe pedir permiso para usar cámara, micrófono, ubicación, SMS y más.',atk:'Crea apps que piden permisos que no necesitan y los abusa: leer mensajes, ubicación, contactos. Cuenta con que la persona toque “Permitir” sin pensar.',def:'Conceder solo lo necesario, usar “solo mientras la app está en uso” y quitar permisos a apps que ya no usas.',lab:'Ajustes > Seguridad y privacidad > Administrador de permisos. ¿Qué apps pueden usar tu micrófono y tu cámara?'},
+   {n:2,name:'Origen de las apps',what:'De dónde viene lo que instalas: tiendas oficiales o archivos APK de otras fuentes.',atk:'Disfraza apps maliciosas de legítimas o de versiones gratis de apps de pago y las reparte por mensajes o sitios externos, fuera de los controles de la tienda.',def:'Instalar desde tiendas oficiales, mantener Play Protect activo y no permitir instalar apps de fuentes desconocidas.',lab:'En Play Store abre Play Protect y confirma que esté activo. Revisa en Ajustes qué apps pueden instalar otras apps.'},
+   {n:3,name:'Accesos especiales',what:'Funciones muy potentes: accesibilidad, superposición sobre otras apps y administrador del dispositivo.',atk:'Convence a la víctima de activar accesibilidad o superposición para leer la pantalla, capturar códigos o mostrar una pantalla falsa encima de la app del banco.',def:'No activar accesibilidad ni superposición para apps que no conoces, y revisar periódicamente quién tiene esos accesos.',lab:'Ajustes > Accesibilidad > Apps instaladas. ¿Reconoces todas las que tienen acceso?'},
+   {n:4,name:'Red y conexiones',what:'Wi-Fi, datos móviles, Bluetooth y NFC: todo lo que conecta al teléfono con el exterior.',atk:'Monta redes Wi-Fi falsas con nombre conocido, intercepta tráfico sin cifrar o aprovecha un Bluetooth siempre encendido cerca de la víctima.',def:'Usar VPN en redes públicas, apagar Bluetooth y NFC cuando no se usan, desconfiar de Wi-Fi abiertas y exigir HTTPS.',lab:'Ajustes > Wi-Fi > Redes guardadas. Borra las que no reconoces.'},
+   {n:5,name:'Parches y versión',what:'Las actualizaciones de Android y el parche de seguridad mensual que entrega el fabricante.',atk:'Busca teléfonos sin parches o sin soporte, porque las fallas ya están documentadas y siguen abiertas.',def:'Mantener el sistema actualizado y preferir equipos que todavía reciben soporte del fabricante.',lab:'Ajustes > Acerca del teléfono > Versión de Android. ¿Qué fecha tiene el nivel de parche de seguridad?'},
+   {n:6,name:'Bloqueo, cifrado y robo',what:'El bloqueo de pantalla, el cifrado del almacenamiento y qué pasa si el teléfono se pierde o te duplican la SIM.',atk:'Aprovecha teléfonos sin bloqueo o con PIN débil, o duplica la SIM de la víctima (SIM swapping) para recibir sus códigos por SMS.',def:'Bloqueo fuerte, doble factor con app o llave en vez de SMS, PIN en la SIM y “Encontrar mi dispositivo” activo.',lab:'Ajustes > Seguridad: revisa tu método de bloqueo y que Encontrar mi dispositivo esté activo.'}
+  ];
+  var AQ=[
+   {t:'Una linterna pide permiso para leer tus SMS y tu ubicación.',a:1,w:'Son permisos que no corresponden a la función de la app: permisos y sandbox.'},
+   {t:'Alguien instala un APK que llegó por WhatsApp prometiendo una app de pago gratis.',a:2,w:'Instalar desde fuera de la tienda oficial es un problema del origen de las apps.'},
+   {t:'Una app desconocida pide activar su servicio de accesibilidad para funcionar.',a:3,w:'Accesibilidad permite leer la pantalla y actuar: es un acceso especial muy abusado.'},
+   {t:'El teléfono se conecta solo a un Wi-Fi público falso con el nombre de una cafetería.',a:4,w:'Es una amenaza de red y conexiones: conviene borrar redes guardadas y usar VPN.'},
+   {t:'Un teléfono lleva años sin recibir parches de seguridad.',a:5,w:'Sin parches quedan abiertas fallas conocidas: parches y versión.'},
+   {t:'Alguien duplica la SIM de la víctima para recibir sus códigos por SMS.',a:6,w:'Es SIM swapping: se mitiga con doble factor que no dependa de SMS y PIN en la SIM.'},
+   {t:'Una app muestra una pantalla falsa encima de la app del banco para robar la clave.',a:3,w:'La superposición sobre otras apps es otro acceso especial que se abusa.'},
+   {t:'Se pierde el teléfono y no tenía bloqueo de pantalla ni Encontrar mi dispositivo.',a:6,w:'Sin bloqueo ni localización, el robo expone todo: bloqueo, cifrado y robo.'}
+  ];
+  var O={seen:{},best:0}, OL={seen:{},best:0}, OAND={seen:{},best:0};
+  try{ var so=JSON.parse(store.get('cl-os-win')||'null'); if(so) O=so; }catch(e){}
+  try{ var sl=JSON.parse(store.get('cl-os-lin')||'null'); if(sl) OL=sl; }catch(e){}
+  try{ var sn=JSON.parse(store.get('cl-os-and')||'null'); if(sn) OAND=sn; }catch(e){}
+  var OSS={win:{name:'Windows',where:'tu máquina virtual',areas:OA,quiz:QO,key:'cl-os-win',st:O},lin:{name:'Linux',where:'tu máquina virtual',areas:LA,quiz:LQ,key:'cl-os-lin',st:OL},and:{name:'Android',where:'tu teléfono',areas:AA,quiz:AQ,key:'cl-os-and',st:OAND}}, cur='win';
+  function cs(){ return OSS[cur]; }
+  function saveO(){ store.set(cs().key,JSON.stringify(cs().st)); }
+  function osHome(){
+    var w=Object.keys(O.seen).length, l=Object.keys(OL.seen).length, a=Object.keys(OAND.seen).length;
+    $('hp4').style.width=((w+l+a)/18*100)+'%';
+    $('ht4').textContent='Windows '+w+'/6 · Linux '+l+'/6 · Android '+a+'/6 áreas exploradas'+((O.best||OL.best||OAND.best)?' · mejor práctica: '+O.best+', '+OL.best+', '+OAND.best:'');
+  }
+  var oOpen=null, oPov={};
+  function renderO(){
+    var h='';
+    cs().areas.forEach(function(f){
+      var o=oOpen===f.n, p=oPov[f.n]||'r';
+      h+='<div class="layer'+(cs().st.seen[f.n]?' seen':'')+'"><button class="lh" data-n="'+f.n+'" aria-expanded="'+o+'"><span class="num mono">'+f.n+'</span><span><div class="ln">'+f.name+'</div></span></button>';
+      if(o){
+        h+='<div class="lb"><p>'+f.what+'</p>'
+          +'<div class="sw"><button class="r" data-p="r" data-n="'+f.n+'" aria-pressed="'+(p==='r')+'">Atacante</button><button class="b" data-p="b" data-n="'+f.n+'" aria-pressed="'+(p==='b')+'">Defensor</button></div>'
+          +(p==='r'?'<div class="pov r"><b>Qué busca el atacante</b>'+f.atk+'</div>':'<div class="pov b"><b>Cómo se endurece</b>'+f.def+'</div>')
+          +'<div class="truco"><b>Míralo en '+cs().where+':</b> '+f.lab+'</div></div>';
+      }
+      h+='</div>';
+    });
+    $('areas').innerHTML=h;
+  }
+  $('areas').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var n=+b.getAttribute('data-n');
+    if(b.classList.contains('lh')){ oOpen=(oOpen===n)?null:n; if(oOpen){ cs().st.seen[n]=1; saveO(); } }
+    else { oPov[n]=b.getAttribute('data-p'); }
+    renderO();
+  });
+  renderO();
+  $('goOs').addEventListener('click',function(){ go('os'); });
+  $('back4').addEventListener('click',function(){ go('home'); });
+  var os_=[], oi=0, oscore=0, oans=false;
+  function startO(){ os_=shuffle(cs().quiz); oi=0; oscore=0; renderQO(); }
+  function renderQO(){
+    var v=$('vPracO'); oans=false;
+    if(oi>=os_.length){
+      if(oscore>cs().st.best){ cs().st.best=oscore; saveO(); }
+      v.innerHTML='<p class="score">Resultado</p><div class="q">Acertaste '+oscore+' de '+os_.length+'.</div><div class="fb">'+(oscore===os_.length?'Ya ubicas cada área de '+cs().name+'.':'Repasa las áreas donde fallaste y repite: cada ronda cambia el orden.')+'</div><button class="next" id="again4">Repetir práctica</button>';
+      $('again4').addEventListener('click',startO); return;
+    }
+    var q=os_[oi];
+    v.innerHTML='<p class="score">Pregunta '+(oi+1)+' de '+os_.length+' · aciertos '+oscore+'</p><div class="q">'+q.t+'</div><p class="sub">¿De qué área de '+cs().name+' se trata?</p><div class="opts">'+cs().areas.map(function(f){return '<button data-n="'+f.n+'"><span class="mono">'+f.n+'</span> '+f.name+'</button>'}).join('')+'</div><div id="fbk4"></div>';
+  }
+  $('vPracO').addEventListener('click',function(e){
+    var b=e.target.closest('.opts button'); if(!b||oans) return;
+    oans=true; var q=os_[oi], n=+b.getAttribute('data-n'), ok=n===q.a;
+    if(ok) oscore++;
+    $('vPracO').querySelectorAll('.opts button').forEach(function(x){ var xn=+x.getAttribute('data-n'); if(xn===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+    $('fbk4').innerHTML='<div class="fb"><b>'+(ok?'Correcto.':'No es esa.')+'</b> '+q.w+'</div><button class="next" id="nx4">'+(oi+1<os_.length?'Siguiente':'Ver resultado')+'</button>';
+    $('nx4').addEventListener('click',function(){ oi++; renderQO(); });
+  });
+  function tabO(t){
+    $('tAreas').setAttribute('aria-selected',t==='a'); $('tPracO').setAttribute('aria-selected',t==='p');
+    $('vAreas').hidden=t!=='a'; $('vPracO').hidden=t!=='p';
+    if(t==='p') startO();
+  }
+  function setOs(k){
+    cur=k; oOpen=null; oPov={};
+    $('oWin').setAttribute('aria-pressed',k==='win'); $('oLin').setAttribute('aria-pressed',k==='lin'); $('oAnd').setAttribute('aria-pressed',k==='and');
+    renderO(); if(!$('vPracO').hidden) startO();
+  }
+  $('oWin').addEventListener('click',function(){ setOs('win'); });
+  $('oLin').addEventListener('click',function(){ setOs('lin'); });
+  $('oAnd').addEventListener('click',function(){ setOs('and'); });
+  $('tAreas').addEventListener('click',function(){ tabO('a'); });
+  $('tPracO').addEventListener('click',function(){ tabO('p'); });
+
+  /* Módulo: Active Directory */
+  var ADA=[
+   {n:1,name:'Qué es AD y el dominio',what:'Un directorio central con usuarios, equipos y grupos. Los controladores de dominio (DC) autentican a todos y guardan las reglas.',atk:'El DC es la joya de la corona: quien lo controla controla toda la red. Todo el recorrido del atacante apunta hacia allí.',def:'Aislar y proteger los controladores de dominio, darles acceso a muy poca gente y mantenerlos siempre parchados.',lab:'Si montas un dominio de prueba en tu laboratorio, abre Usuarios y equipos de Active Directory y mira cómo se organizan las unidades organizativas.'},
+   {n:2,name:'Usuarios, grupos y privilegios',what:'Quién pertenece a qué grupo, y qué grupos mandan, como Domain Admins y Enterprise Admins.',atk:'Busca quién es administrador y qué cuentas tienen permisos de sobra, incluso por grupos dentro de otros grupos que nadie recuerda.',def:'Pocos miembros en grupos privilegiados, revisarlos con frecuencia y usar cuentas de administrador separadas de las cuentas de uso diario.',lab:'En un dominio de prueba, revisa quiénes son miembros de Domain Admins. ¿Hay alguien que no debería estar?'},
+   {n:3,name:'Autenticación: Kerberos y NTLM',what:'Cómo se prueba quién eres sin enviar la contraseña cada vez: se usan tickets (Kerberos) y hashes (NTLM).',atk:'En vez de la contraseña en claro, abusa de los tickets y hashes que ya circulan: reutilizarlos para hacerse pasar por alguien o intentar descifrar los de cuentas de servicio.',def:'Desactivar NTLM donde se pueda, contraseñas largas en cuentas de servicio, Credential Guard y alertas por uso anormal de tickets.',lab:'En un dominio de prueba, el Visor de eventos del controlador de dominio registra las autenticaciones en la categoría Seguridad.'},
+   {n:4,name:'Políticas de grupo (GPO)',what:'Reglas centrales que se aplican a muchos equipos a la vez: configuración, scripts y programas.',atk:'Si logra editar una política, puede empujar configuración o programas a todos los equipos a la vez. Busca permisos mal asignados sobre ellas.',def:'Limitar quién puede editar GPO, auditar cada cambio y usarlas para endurecer los equipos, no solo para administrarlos.',lab:'En un dominio de prueba, abre la consola de administración de directivas de grupo y revisa quién tiene permiso de editar cada política.'},
+   {n:5,name:'Cuentas de servicio y confianzas',what:'Cuentas que usan aplicaciones y servicios, y relaciones de confianza entre dominios.',atk:'Las cuentas de servicio suelen tener contraseñas viejas, débiles o permisos de más. Las confianzas entre dominios pueden dejarle saltar de uno a otro.',def:'Cuentas de servicio administradas con contraseñas largas y rotativas (gMSA), mínimo privilegio y revisar delegaciones y confianzas.',lab:'En un dominio de prueba, lista las cuentas de servicio y fíjate cuándo cambiaron por última vez su contraseña.'},
+   {n:6,name:'Monitoreo y recuperación',what:'Los registros de eventos del dominio, las alertas y las copias de seguridad para volver a un estado limpio.',atk:'Cuenta con que nadie mira los registros ni sabe cuándo un grupo privilegiado cambia. Si no hay alertas, avanza sin prisa.',def:'Centralizar los registros, alertar cambios en grupos privilegiados y tener copias del dominio probadas con un plan de recuperación.',lab:'En un dominio de prueba, revisa si se registra y alerta cuando alguien se agrega al grupo de administradores.'}
+  ];
+  var ADQ=[
+   {t:'Un solo servidor autentica a todos los usuarios y equipos; si cae, el atacante controla todo.',a:1,w:'Es el controlador de dominio, el corazón de AD.'},
+   {t:'El grupo Domain Admins tiene 40 miembros y nadie sabe por qué.',a:2,w:'Es exceso de privilegios en grupos: se corrige con pocos miembros y revisión.'},
+   {t:'Se reutiliza un ticket de autenticación robado para hacerse pasar por un usuario sin conocer su contraseña.',a:3,w:'Abusar de tickets y hashes es un ataque a la autenticación (Kerberos y NTLM).'},
+   {t:'Alguien con permisos de sobra edita una política y empuja un programa a todos los equipos.',a:4,w:'Es abuso de las políticas de grupo (GPO).'},
+   {t:'Una cuenta de servicio tiene una contraseña vieja y fácil de adivinar que nunca cambió.',a:5,w:'Las cuentas de servicio mal cuidadas son un punto débil clásico de AD.'},
+   {t:'Nadie recibe una alerta cuando una persona se agrega al grupo de administradores del dominio.',a:6,w:'Falta de monitoreo: es justo lo que el atacante espera.'},
+   {t:'NTLM sigue activo en toda la red solo por costumbre.',a:3,w:'NTLM es un protocolo de autenticación antiguo y más fácil de abusar: conviene desactivarlo.'},
+   {t:'Una relación de confianza entre dos dominios deja acceder al otro sin revisión.',a:5,w:'Las confianzas entre dominios son parte de las cuentas de servicio y confianzas.'}
+  ];
+  var AD={seen:{},best:0};
+  try{ var sad=JSON.parse(store.get('cl-ad')||'null'); if(sad) AD=sad; }catch(e){}
+  function saveAD(){ store.set('cl-ad',JSON.stringify(AD)); }
+  function adHome(){ var c=Object.keys(AD.seen).length; $('hp5').style.width=(c/6*100)+'%'; $('ht5').textContent=c+' de 6 áreas exploradas'+(AD.best?' · mejor práctica '+AD.best+'/'+ADQ.length:''); }
+  var aOpen2=null, aPov2={};
+  function renderAD(){
+    var h='';
+    ADA.forEach(function(f){
+      var o=aOpen2===f.n, p=aPov2[f.n]||'r';
+      h+='<div class="layer'+(AD.seen[f.n]?' seen':'')+'"><button class="lh" data-n="'+f.n+'" aria-expanded="'+o+'"><span class="num mono">'+f.n+'</span><span><div class="ln">'+f.name+'</div></span></button>';
+      if(o){
+        h+='<div class="lb"><p>'+f.what+'</p>'
+          +'<div class="sw"><button class="r" data-p="r" data-n="'+f.n+'" aria-pressed="'+(p==='r')+'">Atacante</button><button class="b" data-p="b" data-n="'+f.n+'" aria-pressed="'+(p==='b')+'">Defensor</button></div>'
+          +(p==='r'?'<div class="pov r"><b>Qué busca el atacante</b>'+f.atk+'</div>':'<div class="pov b"><b>Cómo se protege</b>'+f.def+'</div>')
+          +'<div class="truco"><b>Para tu laboratorio:</b> '+f.lab+'</div></div>';
+      }
+      h+='</div>';
+    });
+    $('areasA').innerHTML=h;
+  }
+  $('areasA').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var n=+b.getAttribute('data-n');
+    if(b.classList.contains('lh')){ aOpen2=(aOpen2===n)?null:n; if(aOpen2){ AD.seen[n]=1; saveAD(); } }
+    else { aPov2[n]=b.getAttribute('data-p'); }
+    renderAD();
+  });
+  renderAD();
+  $('goAd').addEventListener('click',function(){ go('ad'); });
+  $('back5').addEventListener('click',function(){ go('home'); });
+
+  /* Camino hacia el control del dominio */
+  var ADC=[
+   {n:1,name:'Doble factor',t:'Acceso inicial con una cuenta común',pass:'Con la contraseña robada entra como usuario del dominio.',stop:'El segundo factor impide usar solo la contraseña robada.'},
+   {n:2,name:'Monitoreo y alertas',t:'Reconocimiento del dominio',pass:'Consulta con calma usuarios, grupos y equipos: cualquier usuario puede hacerlo.',stop:'Las consultas masivas disparan una alerta y el equipo azul reacciona.'},
+   {n:3,name:'Cuentas de servicio seguras',t:'Credenciales de una cuenta de servicio',pass:'Obtiene datos de una cuenta de servicio con contraseña débil y logra descifrarla.',stop:'La contraseña es larga y aleatoria: no se puede adivinar.'},
+   {n:4,name:'Contraseña de admin local única',t:'Movimiento lateral entre equipos',pass:'La misma contraseña de administrador local sirve en muchos equipos y salta de uno a otro.',stop:'Cada equipo tiene la suya: un equipo caído no abre los demás.'},
+   {n:5,name:'Mínimo privilegio y niveles',t:'Llegar a una cuenta privilegiada',pass:'Un administrador inició sesión en un equipo comprometido y su credencial queda al alcance.',stop:'Los administradores solo entran a equipos protegidos: no hay credenciales valiosas que encontrar.'},
+   {n:6,name:'Copias y plan de recuperación',t:'Control del dominio',pass:'Controla cuentas, equipos y políticas de todo el dominio.',stop:'Se detecta y se restaura el dominio desde copias limpias.'}
+  ];
+  var adOn={1:true,2:true,3:true,4:true,5:true,6:true};
+  function renderCam(){
+    var h='<p class="sub">Un camino típico hacia el control del dominio. Enciende o apaga controles y mira dónde se corta.</p>';
+    ADC.forEach(function(c){ h+='<button class="tg" data-l="'+c.n+'"><span>'+c.name+'</span><span class="st" style="color:'+(adOn[c.n]?'var(--green)':'var(--red)')+'">'+(adOn[c.n]?'Activo':'Apagado')+'</span></button>'; });
+    h+='<button class="ghostb" data-f="1">Simular falla en un control al azar</button><div style="margin-top:14px">';
+    var stopped=false;
+    ADC.forEach(function(c,i){
+      if(stopped){ h+='<div class="step skip">'+(i+1)+'. '+c.t+': el ataque ya no llega hasta aquí.</div>'; return; }
+      if(adOn[c.n]){ stopped=true; h+='<div class="step stop"><b>'+(i+1)+'. '+c.t+': se corta.</b> '+c.stop+'</div>'; }
+      else h+='<div class="step pass"><b>'+(i+1)+'. '+c.t+'.</b> '+c.pass+'</div>';
+    });
+    h+=stopped?'<div class="fb">Apaga el control que cortó el ataque: si hay otro más adelante, igual se detiene. Un solo control nunca debería ser la única defensa.</div>':'<div class="fb"><b>El atacante llegó al control del dominio.</b> Ningún control del recorrido lo detuvo.</div>';
+    $('vCam').innerHTML=h+'</div>';
+  }
+  $('vCam').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    if(b.getAttribute('data-l')!==null){ var l=+b.getAttribute('data-l'); adOn[l]=!adOn[l]; }
+    else if(b.getAttribute('data-f')!==null){
+      var c=ADC.filter(function(x){return adOn[x.n]});
+      if(c.length) adOn[c[Math.floor(Math.random()*c.length)].n]=false;
+    }
+    renderCam();
+  });
+
+  /* Práctica AD */
+  var as2=[], ai2=0, asc=0, aa2=false;
+  function startAD(){ as2=shuffle(ADQ); ai2=0; asc=0; renderQAD(); }
+  function renderQAD(){
+    var v=$('vPracA'); aa2=false;
+    if(ai2>=as2.length){
+      if(asc>AD.best){ AD.best=asc; saveAD(); }
+      v.innerHTML='<p class="score">Resultado</p><div class="q">Acertaste '+asc+' de '+as2.length+'.</div><div class="fb">'+(asc===as2.length?'Ya ubicas cada área de Active Directory.':'Repasa las áreas donde fallaste y repite: cada ronda cambia el orden.')+'</div><button class="next" id="again5">Repetir práctica</button>';
+      $('again5').addEventListener('click',startAD); return;
+    }
+    var q=as2[ai2];
+    v.innerHTML='<p class="score">Pregunta '+(ai2+1)+' de '+as2.length+' · aciertos '+asc+'</p><div class="q">'+q.t+'</div><p class="sub">¿De qué área de Active Directory se trata?</p><div class="opts">'+ADA.map(function(f){return '<button data-n="'+f.n+'"><span class="mono">'+f.n+'</span> '+f.name+'</button>'}).join('')+'</div><div id="fbk5"></div>';
+  }
+  $('vPracA').addEventListener('click',function(e){
+    var b=e.target.closest('.opts button'); if(!b||aa2) return;
+    aa2=true; var q=as2[ai2], n=+b.getAttribute('data-n'), ok=n===q.a;
+    if(ok) asc++;
+    $('vPracA').querySelectorAll('.opts button').forEach(function(x){ var xn=+x.getAttribute('data-n'); if(xn===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+    $('fbk5').innerHTML='<div class="fb"><b>'+(ok?'Correcto.':'No es esa.')+'</b> '+q.w+'</div><button class="next" id="nx5">'+(ai2+1<as2.length?'Siguiente':'Ver resultado')+'</button>';
+    $('nx5').addEventListener('click',function(){ ai2++; renderQAD(); });
+  });
+  function tabAD(t){
+    $('tAreasA').setAttribute('aria-selected',t==='a'); $('tCam').setAttribute('aria-selected',t==='c'); $('tPracA').setAttribute('aria-selected',t==='p');
+    $('vAreasA').hidden=t!=='a'; $('vCam').hidden=t!=='c'; $('vPracA').hidden=t!=='p';
+    if(t==='c') renderCam(); if(t==='p') startAD();
+  }
+  $('tAreasA').addEventListener('click',function(){ tabAD('a'); });
+  $('tCam').addEventListener('click',function(){ tabAD('c'); });
+  $('tPracA').addEventListener('click',function(){ tabAD('p'); });
+
+  /* Módulo: Comandos de Kali por fase */
+  var CM=[
+   {n:1,name:'Reconocimiento',red:[
+     {c:'whois dominio.com',d:'Datos públicos de registro de un dominio.'},
+     {c:'theHarvester -d dominio.com -b all',d:'Reúne correos y subdominios desde fuentes públicas.'},
+     {c:'nmap -sn 192.168.1.0/24',d:'Descubre qué equipos están activos en una red.'}],
+     blue:[
+     {c:'tail -f /var/log/auth.log',d:'Revisa intentos de acceso en tiempo real.'},
+     {c:'tcpdump -i eth0',d:'Captura tráfico para notar escaneos o consultas inusuales.'}]},
+   {n:2,name:'Acceso inicial',red:[
+     {c:'nmap -sV -p- objetivo',d:'Identifica servicios y versiones expuestas.'},
+     {c:'hydra -L usuarios.txt -P claves.txt servicio',d:'Prueba combinaciones de usuario y clave contra un servicio (solo en tu laboratorio).'},
+     {c:'searchsploit nombre_servicio',d:'Busca fallas conocidas ya documentadas para una versión de software.'}],
+     blue:[
+     {c:'fail2ban-client status',d:'Revisa bloqueos automáticos por intentos fallidos.'},
+     {c:'grep "Failed password" /var/log/auth.log',d:'Busca intentos de acceso fallidos en los registros.'}]},
+   {n:3,name:'Ejecución y persistencia',red:[
+     {c:'crontab -e',d:'Programa una tarea para que algo se ejecute solo más adelante.'},
+     {c:'systemctl enable servicio',d:'Hace que un servicio arranque solo con el sistema.'}],
+     blue:[
+     {c:'crontab -l',d:'Revisa qué tareas programadas existen y si alguna es sospechosa.'},
+     {c:'ps aux --sort=-%cpu',d:'Lista procesos activos para detectar algo fuera de lo normal.'}]},
+   {n:4,name:'Escalada de privilegios',red:[
+     {c:'sudo -l',d:'Muestra qué puede ejecutar el usuario actual con sudo.'},
+     {c:'find / -perm -4000 -type f 2>/dev/null',d:'Busca archivos con permiso especial (SUID) que podrían dar más privilegios.'}],
+     blue:[
+     {c:'getent group sudo',d:'Revisa quién pertenece al grupo con permisos elevados.'},
+     {c:'journalctl -u sudo',d:'Audita el uso de sudo en el sistema.'}]},
+   {n:5,name:'Movimiento lateral',red:[
+     {c:'ssh usuario@otro_equipo',d:'Se conecta a otro equipo con credenciales ya obtenidas.'},
+     {c:'arp -a',d:'Lista equipos vecinos en la red local para elegir el siguiente salto.'}],
+     blue:[
+     {c:'ss -tn',d:'Revisa conexiones de red activas desde este equipo.'},
+     {c:'last',d:'Muestra inicios de sesión recientes y desde dónde.'}]},
+   {n:6,name:'Exfiltración e impacto',red:[
+     {c:'scp archivo usuario@externo:/ruta',d:'Copia un archivo hacia un equipo externo.'},
+     {c:'tar -czf datos.tar.gz /ruta',d:'Empaqueta datos antes de sacarlos, para que pesen menos y llamen menos la atención.'}],
+     blue:[
+     {c:'iftop',d:'Observa en vivo qué conexiones consumen más datos.'},
+     {c:'auditctl -l',d:'Revisa las reglas de auditoría que vigilan accesos a archivos sensibles.'}]}
+  ];
+  var CQ=[
+   {t:'nmap -sV -p- objetivo',a:2,w:'Escanea puertos y versiones para encontrar por dónde entrar: acceso inicial.'},
+   {t:'theHarvester -d dominio.com -b all',a:1,w:'Reúne información pública del objetivo antes de tocarlo: reconocimiento.'},
+   {t:'crontab -e',a:3,w:'Programa una tarea para volver a entrar más adelante: persistencia.'},
+   {t:'sudo -l',a:4,w:'Revisa qué permisos de administrador tiene la cuenta actual: escalada de privilegios.'},
+   {t:'ssh usuario@otro_equipo con una contraseña ya robada',a:5,w:'Salta de un equipo a otro dentro de la red: movimiento lateral.'},
+   {t:'scp archivo usuario@externo:/ruta',a:6,w:'Saca un archivo hacia afuera de la red: exfiltración.'},
+   {t:'fail2ban-client status, del lado defensor',a:2,w:'Vigila intentos fallidos de acceso: se usa para frenar el acceso inicial.'},
+   {t:'last, del lado defensor',a:5,w:'Revisa desde dónde se inició sesión: ayuda a detectar movimiento lateral.'}
+  ];
+  var CMDS={seen:{},best:0};
+  try{ var scm=JSON.parse(store.get('cl-cmd')||'null'); if(scm) CMDS=scm; }catch(e){}
+  function saveCmd(){ store.set('cl-cmd',JSON.stringify(CMDS)); }
+  function cmdHome(){ var c=Object.keys(CMDS.seen).length; $('hp6').style.width=(c/6*100)+'%'; $('ht6').textContent=c+' de 6 fases exploradas'+(CMDS.best?' · mejor práctica '+CMDS.best+'/'+CQ.length:''); }
+  var cOpen=null;
+  function renderCmdF(){
+    var h='';
+    CM.forEach(function(f){
+      var o=cOpen===f.n;
+      h+='<div class="layer'+(CMDS.seen[f.n]?' seen':'')+'"><button class="lh" data-n="'+f.n+'" aria-expanded="'+o+'"><span class="num mono">'+f.n+'</span><span><div class="ln">'+f.name+'</div></span></button>';
+      if(o){
+        h+='<div class="lb">'
+          +'<div class="sect r">Red team</div>'+f.red.map(function(x){return '<div class="cmdrow"><div class="c mono">'+x.c+'</div><div class="d2">'+x.d+'</div></div>'}).join('')
+          +'<div class="sect b">Blue team</div>'+f.blue.map(function(x){return '<div class="cmdrow"><div class="c mono">'+x.c+'</div><div class="d2">'+x.d+'</div></div>'}).join('')
+          +'</div>';
+      }
+      h+='</div>';
+    });
+    $('fasesC').innerHTML=h;
+  }
+  $('fasesC').addEventListener('click',function(e){
+    var b=e.target.closest('.lh'); if(!b) return;
+    var n=+b.getAttribute('data-n');
+    cOpen=(cOpen===n)?null:n; if(cOpen){ CMDS.seen[n]=1; saveCmd(); }
+    renderCmdF();
+  });
+  renderCmdF();
+  $('goCmd').addEventListener('click',function(){ go('cmd'); });
+  $('back6').addEventListener('click',function(){ go('home'); });
+  var cs2=[], ci=0, csc=0, cans=false;
+  function startCmd(){ cs2=shuffle(CQ); ci=0; csc=0; renderQC(); }
+  function renderQC(){
+    var v=$('vPracC'); cans=false;
+    if(ci>=cs2.length){
+      if(csc>CMDS.best){ CMDS.best=csc; saveCmd(); }
+      v.innerHTML='<p class="score">Resultado</p><div class="q">Acertaste '+csc+' de '+cs2.length+'.</div><div class="fb">'+(csc===cs2.length?'Ya ubicas cada comando en su fase.':'Repasa las fases donde fallaste y repite: cada ronda cambia el orden.')+'</div><button class="next" id="again6">Repetir práctica</button>';
+      $('again6').addEventListener('click',startCmd); return;
+    }
+    var q=cs2[ci];
+    v.innerHTML='<p class="score">Pregunta '+(ci+1)+' de '+cs2.length+' · aciertos '+csc+'</p><div class="q mono" style="font-size:16px">'+q.t+'</div><p class="sub">¿A qué fase pertenece?</p><div class="opts">'+CM.map(function(f){return '<button data-n="'+f.n+'"><span class="mono">'+f.n+'</span> '+f.name+'</button>'}).join('')+'</div><div id="fbk6"></div>';
+  }
+  $('vPracC').addEventListener('click',function(e){
+    var b=e.target.closest('.opts button'); if(!b||cans) return;
+    cans=true; var q=cs2[ci], n=+b.getAttribute('data-n'), ok=n===q.a;
+    if(ok) csc++;
+    $('vPracC').querySelectorAll('.opts button').forEach(function(x){ var xn=+x.getAttribute('data-n'); if(xn===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+    $('fbk6').innerHTML='<div class="fb"><b>'+(ok?'Correcto.':'No es esa.')+'</b> '+q.w+'</div><button class="next" id="nx6">'+(ci+1<cs2.length?'Siguiente':'Ver resultado')+'</button>';
+    $('nx6').addEventListener('click',function(){ ci++; renderQC(); });
+  });
+  function tabC(t){
+    $('tFasesC').setAttribute('aria-selected',t==='f'); $('tPracC').setAttribute('aria-selected',t==='p');
+    $('vFasesC').hidden=t!=='f'; $('vPracC').hidden=t!=='p';
+    if(t==='p') startCmd();
+  }
+  $('tFasesC').addEventListener('click',function(){ tabC('f'); });
+  $('tPracC').addEventListener('click',function(){ tabC('p'); });
+
+  /* Módulo: Firewall, IDS e IPS */
+  var FW=[
+   {n:1,name:'Firewall',what:'Filtra tráfico según reglas: qué IP, puerto o protocolo puede pasar y en qué dirección. No entiende el contenido, solo las “cajas” del paquete.',atk:'Busca reglas demasiado abiertas, puertos olvidados, o esconde su tráfico dentro de conexiones permitidas (como HTTPS) para que parezca normal.',def:'Regla por defecto que deniega todo y solo permite lo necesario, revisar reglas con frecuencia y eliminar las que ya no se usan.',lab:'En tu laboratorio Linux: sudo ufw status numbered, para ver tus reglas activas y detectar cuáles sobran.'},
+   {n:2,name:'IDS (detección)',what:'Vigila el tráfico o el equipo y avisa si ve algo sospechoso, pero no lo bloquea: solo alerta.',atk:'Intenta pasar desapercibido: tráfico lento y disperso en el tiempo, o variantes de un ataque que no coinciden con firmas conocidas.',def:'Mantener las firmas y reglas actualizadas, combinar detección por firmas con detección de comportamiento, y revisar las alertas, porque un IDS que nadie mira no sirve.',lab:'Si tienes Snort o Suricata en tu laboratorio, revisa su carpeta de alertas (por ejemplo /var/log/snort) después de generar tráfico de prueba.'},
+   {n:3,name:'IPS (prevención)',what:'Como el IDS, pero además bloquea automáticamente lo que detecta como ataque, en el camino del tráfico.',atk:'Busca pasar como falso negativo (técnicas nuevas que el IPS no reconoce) o provocar tantas alertas falsas que el equipo termine ignorándolas o desactivándolo.',def:'Afinar las reglas para bajar los falsos positivos, probar cambios antes de aplicarlos en producción y tener un plan si el IPS falla (modo seguro, no que deje pasar todo).',lab:'Piensa en una regla de tu firewall: si fuera un IPS y bloqueara por error tráfico legítimo, ¿qué servicio se vería afectado?'},
+   {n:4,name:'Zonas y DMZ',what:'Separar la red en zonas de confianza: internet, una zona intermedia (DMZ) para servicios públicos, y la red interna protegida.',atk:'Si compromete un servidor en la DMZ, intenta usarlo como trampolín hacia la red interna si no está bien aislada.',def:'La DMZ solo habla lo necesario con la red interna, nunca al revés sin control, y cada zona tiene sus propias reglas.',lab:'Dibuja o imagina tu red de laboratorio: ¿qué equipo haría de DMZ y qué reglas tendría hacia la red interna?'},
+   {n:5,name:'Registros y ajuste',what:'Los registros de estos equipos, y el trabajo constante de ajustar reglas para que bloqueen lo malo sin frenar lo normal.',atk:'Cuenta con reglas viejas, mal ajustadas o con demasiados falsos positivos como para que el equipo deje de prestarles atención.',def:'Revisar y limpiar reglas con regularidad, centralizar registros y medir cuántas alertas son falsas alarmas para ir ajustando.',lab:'En tu firewall de laboratorio, identifica una regla que ya no tenga sentido y bórrala con cuidado.'}
+  ];
+  var FQ=[
+   {t:'Una regla del firewall permite cualquier IP hacia cualquier puerto por error.',a:1,w:'Es una regla demasiado abierta: problema de configuración del firewall.'},
+   {t:'El sistema detecta tráfico sospechoso y avisa, pero no lo bloquea.',a:2,w:'Detectar y avisar sin bloquear es el rol del IDS.'},
+   {t:'El sistema detecta un ataque conocido y lo corta automáticamente antes de que llegue.',a:3,w:'Bloquear en el camino del tráfico es el rol del IPS.'},
+   {t:'Un servidor web público está en una zona separada de la red interna de la empresa.',a:4,w:'Es una DMZ: zona intermedia para servicios expuestos a internet.'},
+   {t:'Hay tantas alertas falsas que el equipo de seguridad terminó ignorando todas las notificaciones.',a:5,w:'Es un problema de ajuste de reglas y registros: demasiados falsos positivos.'},
+   {t:'Un atacante esconde su tráfico dentro de una conexión HTTPS normal para que el firewall no lo note.',a:1,w:'El firewall filtra por reglas, no analiza el contenido cifrado: es una forma de esquivarlo.'},
+   {t:'Un atacante prueba variantes lentas de un ataque para no coincidir con ninguna firma conocida.',a:2,w:'Evadir firmas conocidas apunta directo al IDS, que detecta por firmas y patrones.'},
+   {t:'Tras comprometer el servidor de la DMZ, el atacante intenta saltar a la red interna.',a:4,w:'Es el riesgo de una DMZ mal aislada de la red interna.'}
+  ];
+  var FWst={seen:{},best:0};
+  try{ var sf=JSON.parse(store.get('cl-fw')||'null'); if(sf) FWst=sf; }catch(e){}
+  function saveFw(){ store.set('cl-fw',JSON.stringify(FWst)); }
+  function fwHome(){ var c=Object.keys(FWst.seen).length; $('hp7').style.width=(c/5*100)+'%'; $('ht7').textContent=c+' de 5 áreas exploradas'+(FWst.best?' · mejor práctica '+FWst.best+'/'+FQ.length:''); }
+  var fOpen=null, fPov={};
+  function renderFw(){
+    var h='';
+    FW.forEach(function(f){
+      var o=fOpen===f.n, p=fPov[f.n]||'b';
+      h+='<div class="layer'+(FWst.seen[f.n]?' seen':'')+'"><button class="lh" data-n="'+f.n+'" aria-expanded="'+o+'"><span class="num mono">'+f.n+'</span><span><div class="ln">'+f.name+'</div></span></button>';
+      if(o){
+        h+='<div class="lb"><p>'+f.what+'</p>'
+          +'<div class="sw"><button class="b" data-p="b" data-n="'+f.n+'" aria-pressed="'+(p==='b')+'">Defensor</button><button class="r" data-p="r" data-n="'+f.n+'" aria-pressed="'+(p==='r')+'">Atacante</button></div>'
+          +(p==='b'?'<div class="pov b"><b>Cómo se configura bien</b>'+f.def+'</div>':'<div class="pov r"><b>Cómo intenta esquivarlo</b>'+f.atk+'</div>')
+          +'<div class="truco"><b>Para tu laboratorio:</b> '+f.lab+'</div></div>';
+      }
+      h+='</div>';
+    });
+    $('areasF').innerHTML=h;
+  }
+  $('areasF').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var n=+b.getAttribute('data-n');
+    if(b.classList.contains('lh')){ fOpen=(fOpen===n)?null:n; if(fOpen){ FWst.seen[n]=1; saveFw(); } }
+    else { fPov[n]=b.getAttribute('data-p'); }
+    renderFw();
+  });
+  renderFw();
+  $('goFw').addEventListener('click',function(){ go('fw'); });
+  $('back7').addEventListener('click',function(){ go('home'); });
+
+  /* Reglas: simulador de orden de reglas de firewall */
+  var RULES=[
+   {t:'Permitir SSH solo desde la IP de administración',act:'permitir',match:function(p){return p.port===22 && p.src==='admin'}},
+   {t:'Denegar todo el tráfico entrante por defecto',act:'denegar',match:function(){return true}}
+  ];
+  var PKTS=[
+   {d:'Conexión SSH (puerto 22) desde la IP de administración',port:22,src:'admin'},
+   {d:'Conexión SSH (puerto 22) desde una IP desconocida de internet',port:22,src:'internet'},
+   {d:'Conexión web (puerto 80) desde internet',port:80,src:'internet'}
+  ];
+  var ruleOrder=[0,1], pktSel=0;
+  function evalRules(order,pkt){
+    for(var i=0;i<order.length;i++){ var r=RULES[order[i]]; if(r.match(pkt)) return {rule:r,idx:i}; }
+    return null;
+  }
+  function renderReglas(){
+    var h='<p class="sub">El orden de las reglas importa: la primera que coincide decide. Reordena y prueba distintos paquetes.</p>';
+    h+='<p class="sub" style="margin-top:10px"><b>Orden actual</b></p>';
+    ruleOrder.forEach(function(idx,pos){ var r=RULES[idx]; h+='<div class="tg"><span>'+(pos+1)+'. '+r.t+'</span><span class="st" style="color:'+(r.act==='permitir'?'var(--green)':'var(--red)')+'">'+r.act.toUpperCase()+'</span></div>'; });
+    h+='<button class="ghostb" id="swapR">Invertir el orden de las reglas</button>';
+    h+='<p class="sub" style="margin-top:14px"><b>Elige un paquete</b></p><div class="opts">'+PKTS.map(function(p,i){return '<button data-k="'+i+'" style="grid-column:1/-1" aria-pressed="'+(i===pktSel)+'">'+p.d+'</button>'}).join('')+'</div>';
+    var res=evalRules(ruleOrder,PKTS[pktSel]);
+    h+='<div class="fb"><b>Resultado: '+(res?res.rule.act.toUpperCase():'sin coincidencia')+'</b><br>Coincidió con la regla '+(res?(res.idx+1):'-')+': "'+(res?res.rule.t:'')+'".</div>';
+    $('vReglas').innerHTML=h;
+  }
+  $('vReglas').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    if(b.id==='swapR'){ ruleOrder.reverse(); }
+    else if(b.getAttribute('data-k')!==null){ pktSel=+b.getAttribute('data-k'); }
+    renderReglas();
+  });
+
+  /* Práctica FW */
+  var fs2=[], fi=0, fsc=0, fans=false;
+  function startFw(){ fs2=shuffle(FQ); fi=0; fsc=0; renderQF(); }
+  function renderQF(){
+    var v=$('vPracF'); fans=false;
+    if(fi>=fs2.length){
+      if(fsc>FWst.best){ FWst.best=fsc; saveFw(); }
+      v.innerHTML='<p class="score">Resultado</p><div class="q">Acertaste '+fsc+' de '+fs2.length+'.</div><div class="fb">'+(fsc===fs2.length?'Distingues bien firewall, IDS e IPS.':'Repasa las áreas donde fallaste y repite: cada ronda cambia el orden.')+'</div><button class="next" id="again7">Repetir práctica</button>';
+      $('again7').addEventListener('click',startFw); return;
+    }
+    var q=fs2[fi];
+    v.innerHTML='<p class="score">Pregunta '+(fi+1)+' de '+fs2.length+' · aciertos '+fsc+'</p><div class="q">'+q.t+'</div><p class="sub">¿De qué área se trata?</p><div class="opts">'+FW.map(function(f){return '<button data-n="'+f.n+'"><span class="mono">'+f.n+'</span> '+f.name+'</button>'}).join('')+'</div><div id="fbk7"></div>';
+  }
+  $('vPracF').addEventListener('click',function(e){
+    var b=e.target.closest('.opts button'); if(!b||fans) return;
+    fans=true; var q=fs2[fi], n=+b.getAttribute('data-n'), ok=n===q.a;
+    if(ok) fsc++;
+    $('vPracF').querySelectorAll('.opts button').forEach(function(x){ var xn=+x.getAttribute('data-n'); if(xn===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+    $('fbk7').innerHTML='<div class="fb"><b>'+(ok?'Correcto.':'No es esa.')+'</b> '+q.w+'</div><button class="next" id="nx7">'+(fi+1<fs2.length?'Siguiente':'Ver resultado')+'</button>';
+    $('nx7').addEventListener('click',function(){ fi++; renderQF(); });
+  });
+  function tabF(t){
+    $('tAreasF').setAttribute('aria-selected',t==='a'); $('tReglas').setAttribute('aria-selected',t==='r'); $('tPracF').setAttribute('aria-selected',t==='p');
+    $('vAreasF').hidden=t!=='a'; $('vReglas').hidden=t!=='r'; $('vPracF').hidden=t!=='p';
+    if(t==='r') renderReglas(); if(t==='p') startFw();
+  }
+  $('tAreasF').addEventListener('click',function(){ tabF('a'); });
+  $('tReglas').addEventListener('click',function(){ tabF('r'); });
+  $('tPracF').addEventListener('click',function(){ tabF('p'); });
+
+  /* Módulo: Buenas prácticas (cierre) */
+  var BPR=[
+   'Siempre con autorización explícita y por escrito: nunca pruebes en sistemas que no son tuyos.',
+   'Reconocimiento antes de actuar: entiende el objetivo antes de tocar nada.',
+   'Documenta cada paso mientras trabajas, no al final: comandos, resultados y lo que vas aprendiendo.',
+   'Piensa en cadena, no en herramientas sueltas: cada técnica se apoya en la anterior.',
+   'El acceso inicial casi siempre pasa por la persona, no por algo sofisticado: no subestimes el phishing.',
+   'Antes de escalar privilegios, revisa qué ya tienes: muchas veces el camino más simple es el correcto.',
+   'Respeta el alcance acordado (scope): no te salgas de lo autorizado aunque veas algo tentador al lado.',
+   'El objetivo final es el informe: un hallazgo que no se explica bien no ayuda a nadie a corregirlo.'
+  ];
+  var BPB=[
+   'Nada reemplaza los respaldos probados: una copia que nunca se restauró no es un respaldo real.',
+   'Mínimo privilegio en todas partes: cuentas, servicios y grupos solo con lo que necesitan.',
+   'Un registro que nadie revisa no sirve: define quién mira las alertas y cuándo.',
+   'Los parches son la defensa más barata y más olvidada: mantén un inventario y un calendario.',
+   'La defensa en profundidad existe porque ninguna capa es perfecta: no dependas de una sola.',
+   'Capacita a las personas con ejemplos reales, no solo con una charla una vez al año.',
+   'Ten un plan de respuesta a incidentes escrito y ensayado antes de necesitarlo, no durante la crisis.',
+   'Audita tus propios permisos con la misma curiosidad con la que un atacante los buscaría.'
+  ];
+  var BP={r:{},b:{}};
+  try{ var sbp=JSON.parse(store.get('cl-bp')||'null'); if(sbp) BP=sbp; }catch(e){}
+  function saveBp(){ store.set('cl-bp',JSON.stringify(BP)); }
+  var bpSide='r';
+  function bpHome(){
+    var r=Object.keys(BP.r).length, b=Object.keys(BP.b).length;
+    $('hp8').style.width=((r+b)/(BPR.length+BPB.length)*100)+'%';
+    $('ht8').textContent='Red '+r+'/'+BPR.length+' · Blue '+b+'/'+BPB.length+' repasadas';
+  }
+  function renderBp(){
+    var list=bpSide==='r'?BPR:BPB, st=bpSide==='r'?BP.r:BP.b;
+    $('bpList').innerHTML=list.map(function(t,i){ var on=!!st[i]; return '<button class="ck" data-i="'+i+'" aria-pressed="'+on+'"><span class="box"></span><span class="tx">'+t+'</span></button>'; }).join('');
+  }
+  $('bpList').addEventListener('click',function(e){
+    var b=e.target.closest('.ck'); if(!b) return;
+    var i=b.getAttribute('data-i'), st=bpSide==='r'?BP.r:BP.b;
+    if(st[i]) delete st[i]; else st[i]=1;
+    saveBp(); bpHome(); renderBp();
+  });
+  $('bpR').addEventListener('click',function(){ bpSide='r'; $('bpR').setAttribute('aria-pressed',true); $('bpB').setAttribute('aria-pressed',false); renderBp(); });
+  $('bpB').addEventListener('click',function(){ bpSide='b'; $('bpR').setAttribute('aria-pressed',false); $('bpB').setAttribute('aria-pressed',true); renderBp(); });
+  $('goBp').addEventListener('click',function(){ go('bp'); });
+  $('back8').addEventListener('click',function(){ go('home'); });
+  renderBp();
+
+  /* Módulo: Lectura de logs */
+  var LG=[
+   {n:1,name:'SSH: fuerza bruta',src:'/var/log/auth.log',log:
+'Nov 20 03:14:02 srv sshd[1122]: Failed password for root from 203.0.113.9 port 51422 ssh2\n'+
+'Nov 20 03:14:03 srv sshd[1122]: Failed password for root from 203.0.113.9 port 51423 ssh2\n'+
+'Nov 20 03:14:04 srv sshd[1122]: Failed password for root from 203.0.113.9 port 51424 ssh2\n'+
+'Nov 20 03:14:05 srv sshd[1130]: Accepted password for root from 203.0.113.9 port 51430 ssh2',
+     red:'Si estuvieras probando esto en tu laboratorio, estas líneas te dirían que tus intentos están siendo registrados uno por uno: ritmo así de rápido es fácil de detectar y de bloquear.',
+     blue:'Muchos “Failed password” seguidos, mismo usuario y misma IP, en segundos, terminando en un “Accepted”: es el patrón clásico de fuerza bruta que sí funcionó. Debería disparar una alerta antes del “Accepted”.'},
+   {n:2,name:'Web: escaneo de rutas',src:'access.log (Apache/Nginx)',log:
+'203.0.113.9 - - [20/Nov/2026:04:02:01] "GET /admin HTTP/1.1" 404 512\n'+
+'203.0.113.9 - - [20/Nov/2026:04:02:01] "GET /phpmyadmin HTTP/1.1" 404 512\n'+
+'203.0.113.9 - - [20/Nov/2026:04:02:02] "GET /.env HTTP/1.1" 404 512\n'+
+'203.0.113.9 - - [20/Nov/2026:04:02:02] "GET /backup.zip HTTP/1.1" 404 512',
+     red:'Todo 404 significa que ninguna de esas rutas existe en este servidor: el reconocimiento no encontró nada, pero ya quedó registrado que lo intentaste.',
+     blue:'Muchas rutas distintas y poco comunes, pedidas en segundos desde la misma IP: es un escaneo automatizado buscando paneles o archivos olvidados, no una persona navegando.'},
+   {n:3,name:'Firewall: conexión saliente rara',src:'firewall (iptables/ufw)',log:
+'Nov 20 05:10:11 fw kernel: [UFW ALLOW] IN= OUT=eth0 SRC=10.0.0.15 DST=185.220.101.7 PROTO=TCP SPT=51022 DPT=443\n'+
+'Nov 20 05:10:41 fw kernel: [UFW ALLOW] IN= OUT=eth0 SRC=10.0.0.15 DST=185.220.101.7 PROTO=TCP SPT=51023 DPT=443\n'+
+'Nov 20 05:11:11 fw kernel: [UFW ALLOW] IN= OUT=eth0 SRC=10.0.0.15 DST=185.220.101.7 PROTO=TCP SPT=51024 DPT=443',
+     red:'Si este fuera tu equipo comprometido en el laboratorio, verías que la conexión de salida pasó sin problema: el firewall permitió el tráfico porque el puerto 443 parece tráfico web normal.',
+     blue:'Un equipo interno (10.0.0.15) habla con la misma IP externa cada 30 segundos, muy regular: parece un “beacon”, la forma en que un malware avisa que sigue vivo. Vale investigar qué es esa IP de destino.'},
+   {n:4,name:'Windows: creación de cuenta',src:'Visor de eventos - Seguridad',log:
+'4720: A user account was created.\n   New Account: admsoporte\n   Account Enabled By: svc-backup\n'+
+'4732: A member was added to a security-enabled local group.\n   Group: Administrators\n   Member: admsoporte',
+     red:'Si lograste ejecutar esto en tu laboratorio, conseguiste una cuenta nueva con privilegios de administrador, lista para volver a entrar cuando quieras.',
+     blue:'Una cuenta de servicio (svc-backup) creó un usuario nuevo y lo agregó al grupo Administrators: una cuenta de servicio no debería crear usuarios. Es un patrón típico de persistencia.'}
+  ];
+  var LQ2=[
+   {t:'Decenas de "Failed password for root" desde la misma IP en segundos, y al final un "Accepted".',a:1,w:'Es el patrón de fuerza bruta exitosa: muchos fallos y luego un acceso logrado.'},
+   {t:'Pedidos a /admin, /phpmyadmin, /.env y /backup.zip en segundos, todos con 404.',a:2,w:'Es un escaneo automatizado de rutas comunes, no navegación humana.'},
+   {t:'Un equipo interno conecta cada 30 segundos exactos a la misma IP externa por el puerto 443.',a:3,w:'Es un patrón de beacon: conexión regular y sospechosa hacia afuera.'},
+   {t:'Una cuenta de servicio crea un usuario nuevo y lo agrega al grupo de administradores.',a:4,w:'Crear cuentas con privilegios es un patrón típico de persistencia en Windows.'},
+   {t:'Un solo "Failed password" aislado, sin repetición, de una IP conocida de la oficina.',a:1,w:'Un fallo aislado de alguien que se equivocó de clave no es el mismo patrón que la fuerza bruta.'},
+   {t:'Una sola petición a /index.html con código 200 desde una IP.',a:2,w:'Es tráfico web normal, lo opuesto al patrón de escaneo de este caso.'}
+  ];
+  var LGst={seen:{},best:0};
+  try{ var sl2=JSON.parse(store.get('cl-log')||'null'); if(sl2) LGst=sl2; }catch(e){}
+  function saveLog(){ store.set('cl-log',JSON.stringify(LGst)); }
+  function logHome(){ var c=Object.keys(LGst.seen).length; $('hp9').style.width=(c/4*100)+'%'; $('ht9').textContent=c+' de 4 casos revisados'+(LGst.best?' · mejor práctica '+LGst.best+'/'+LQ2.length:''); }
+  var lOpen=null, lPov={};
+  function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function renderLog(){
+    var h='';
+    LG.forEach(function(f){
+      var o=lOpen===f.n, p=lPov[f.n]||'b';
+      h+='<div class="layer'+(LGst.seen[f.n]?' seen':'')+'"><button class="lh" data-n="'+f.n+'" aria-expanded="'+o+'"><span class="num mono">'+f.n+'</span><span><div class="ln">'+f.name+'</div><div class="lu">'+f.src+'</div></span></button>';
+      if(o){
+        h+='<div class="lb"><div class="cmdrow" style="white-space:pre-wrap"><span class="c mono">'+esc(f.log)+'</span></div>'
+          +'<div class="sw"><button class="b" data-p="b" data-n="'+f.n+'" aria-pressed="'+(p==='b')+'">Blue team</button><button class="r" data-p="r" data-n="'+f.n+'" aria-pressed="'+(p==='r')+'">Red team</button></div>'
+          +(p==='b'?'<div class="pov b"><b>Qué nota el blue team</b>'+f.blue+'</div>':'<div class="pov r"><b>Qué nota el red team</b>'+f.red+'</div>')+'</div>';
+      }
+      h+='</div>';
+    });
+    $('casos').innerHTML=h;
+  }
+  $('casos').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var n=+b.getAttribute('data-n');
+    if(b.classList.contains('lh')){ lOpen=(lOpen===n)?null:n; if(lOpen){ LGst.seen[n]=1; saveLog(); } }
+    else { lPov[n]=b.getAttribute('data-p'); }
+    renderLog();
+  });
+  renderLog();
+  $('goLog').addEventListener('click',function(){ go('log'); });
+  $('back9').addEventListener('click',function(){ go('home'); });
+  var ls=[], li=0, lsc=0, lans=false;
+  function startLog(){ ls=shuffle(LQ2); li=0; lsc=0; renderQL(); }
+  function renderQL(){
+    var v=$('vPracL'); lans=false;
+    if(li>=ls.length){
+      if(lsc>LGst.best){ LGst.best=lsc; saveLog(); }
+      v.innerHTML='<p class="score">Resultado</p><div class="q">Acertaste '+lsc+' de '+ls.length+'.</div><div class="fb">'+(lsc===ls.length?'Ya reconoces los patrones típicos en los logs.':'Repasa los casos donde fallaste y repite: cada ronda cambia el orden.')+'</div><button class="next" id="again9">Repetir práctica</button>';
+      $('again9').addEventListener('click',startLog); return;
+    }
+    var q=ls[li];
+    v.innerHTML='<p class="score">Pregunta '+(li+1)+' de '+ls.length+' · aciertos '+lsc+'</p><div class="q mono" style="font-size:15px;white-space:pre-wrap">'+q.t+'</div><p class="sub">¿Qué caso representa?</p><div class="opts">'+LG.map(function(f){return '<button data-n="'+f.n+'"><span class="mono">'+f.n+'</span> '+f.name+'</button>'}).join('')+'</div><div id="fbk9"></div>';
+  }
+  $('vPracL').addEventListener('click',function(e){
+    var b=e.target.closest('.opts button'); if(!b||lans) return;
+    lans=true; var q=ls[li], n=+b.getAttribute('data-n'), ok=n===q.a;
+    if(ok) lsc++;
+    $('vPracL').querySelectorAll('.opts button').forEach(function(x){ var xn=+x.getAttribute('data-n'); if(xn===q.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+    $('fbk9').innerHTML='<div class="fb"><b>'+(ok?'Correcto.':'No es esa.')+'</b> '+q.w+'</div><button class="next" id="nx9">'+(li+1<ls.length?'Siguiente':'Ver resultado')+'</button>';
+    $('nx9').addEventListener('click',function(){ li++; renderQL(); });
+  });
+  function tabL(t){
+    $('tCasos').setAttribute('aria-selected',t==='c'); $('tPracL').setAttribute('aria-selected',t==='p');
+    $('vCasos').hidden=t!=='c'; $('vPracL').hidden=t!=='p';
+    if(t==='p') startLog();
+  }
+  $('tCasos').addEventListener('click',function(){ tabL('c'); });
+  $('tPracL').addEventListener('click',function(){ tabL('p'); });
+
+  home();
+})();
+</script>
+</body>
+</html>
